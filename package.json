@@ -34,10 +34,10 @@
     "nconf": "^0.6.9",
     "slug": "^0.5.0",
     "verror": "^1.4.0",
-    "auth": "git@github.com:dac-os/auth-driver.git",
-    "history": "git@github.com:dac-os/history-driver.git",
-    "calendar": "git@github.com:dac-os/calendar-driver.git",
-    "courses": "git@github.com:dac-os/courses-driver.git"
+    "dacos-auth-driver": "git+https://git@github.com/dac-os/auth-driver.git",
+    "dacos-history-driver": "git+https://git@github.com/dac-os/history-driver.git",
+    "dacos-calendar-driver": "git+https://git@github.com/dac-os/calendar-driver.git",
+    "dacos-courses-driver": "git+https://git@github.com/dac-os/courses-driver.git"
   },
   "config": {
     "blanket": {
