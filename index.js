@@ -34,7 +34,8 @@ app.use(function handleErrors(error, request, response, next) {
       }
   }
   console.error(error);
-  return response.send(500);
+  response.send(500);
+  process.exit();
 });
 app.listen(nconf.get('PORT'));
 app.get('/', function pingSuccess(request, response) {
