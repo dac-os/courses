@@ -37,7 +37,8 @@
     "dacos-auth-driver": "git+https://git@github.com/dac-os/auth-driver.git",
     "dacos-history-driver": "git+https://git@github.com/dac-os/history-driver.git",
     "dacos-calendar-driver": "git+https://git@github.com/dac-os/calendar-driver.git",
-    "dacos-courses-driver": "git+https://git@github.com/dac-os/courses-driver.git"
+    "dacos-status-driver": "git+https://git@github.com/dac-os/status-driver.git",
+    "dacos-enrollment-driver": "git+https://git@github.com/dac-os/enrollment-driver.git"
   },
   "config": {
     "blanket": {
