@@ -1,5 +1,5 @@
 {
-  "MONGOHQ_URL"    : "mongodb://localhost/dacos-history",
+  "MONGOHQ_URL"    : "mongodb://localhost/dacos-courses",
   "PAGE_SIZE"      : 20,
   "PORT"           : 8083,
   "HISTORY_URI"    : "http://localhost:8081",
