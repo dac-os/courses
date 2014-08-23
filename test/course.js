@@ -15,7 +15,7 @@ nock(nconf.get('AUTH_URI'), {
   'profile'          : {
     'name'        : 'admin',
     'slug'        : 'admin',
-    'permissions' : ['changeCourse', 'changeCourse']
+    'permissions' : ['changeCourse', 'changeDiscipline']
   }
 });
 
@@ -44,8 +44,8 @@ describe('course controller', function () {
       var request;
       request = supertest(app);
       request = request.post('/courses');
-      request.send({'code' : 'MC102'});
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'code' : '42'});
+      request.send({'name' : 'Ciencia da computação'});
       request.send({'level' : 'GRAD'});
       request.expect(403);
       request.end(done);
@@ -56,8 +56,8 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'userToken');
-      request.send({'code' : 'MC102'});
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'code' : '42'});
+      request.send({'name' : 'Ciencia da computação'});
       request.send({'level' : 'GRAD'});
       request.expect(403);
       request.end(done);
@@ -68,7 +68,7 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'name' : 'Ciencia da computação'});
       request.send({'level' : 'GRAD'});
       request.expect(400);
       request.expect(function (response) {
@@ -82,7 +82,7 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC102'});
+      request.send({'code' : '42'});
       request.send({'level' : 'GRAD'});
       request.expect(400);
       request.expect(function (response) {
@@ -96,8 +96,8 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC102'});
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'code' : '42'});
+      request.send({'name' : 'Ciencia da computação'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('level').be.equal('required');
@@ -124,7 +124,7 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'name' : 'Ciencia da computação'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -138,7 +138,7 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC102'});
+      request.send({'code' : '42'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('name').be.equal('required');
@@ -166,8 +166,8 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC102'});
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'code' : '42'});
+      request.send({'name' : 'Ciencia da computação'});
       request.send({'level' : 'GRAD'});
       request.expect(201);
       request.end(done);
@@ -181,8 +181,8 @@ describe('course controller', function () {
         request = supertest(app);
         request = request.post('/courses');
         request.set('csrf-token', 'adminToken');
-        request.send({'code' : 'MC102'});
-        request.send({'name' : 'Programação de Computadores'});
+        request.send({'code' : '42'});
+        request.send({'name' : 'Ciencia da computação'});
         request.send({'level' : 'GRAD'});
         request.end(done);
       });
@@ -192,8 +192,8 @@ describe('course controller', function () {
         request = supertest(app);
         request = request.post('/courses');
         request.set('csrf-token', 'adminToken');
-        request.send({'code' : 'MC102'});
-        request.send({'name' : 'Programação de Computadores'});
+        request.send({'code' : '42'});
+        request.send({'name' : 'Ciencia da computação'});
         request.send({'level' : 'GRAD'});
         request.expect(409);
         request.end(done);
@@ -209,8 +209,8 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC102'});
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'code' : '42'});
+      request.send({'name' : 'Ciencia da computação'});
       request.send({'level' : 'GRAD'});
       request.end(done);
     });
@@ -250,8 +250,8 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC102'});
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'code' : '42'});
+      request.send({'name' : 'Ciencia da computação'});
       request.send({'level' : 'GRAD'});
       request.end(done);
     });
@@ -267,11 +267,11 @@ describe('course controller', function () {
     it('should show', function (done) {
       var request;
       request = supertest(app);
-      request = request.get('/courses/MC102');
+      request = request.get('/courses/42');
       request.expect(200);
       request.expect(function (response) {
-        response.body.should.have.property('code').be.equal('MC102');
-        response.body.should.have.property('name').be.equal('Programação de Computadores');
+        response.body.should.have.property('code').be.equal('42');
+        response.body.should.have.property('name').be.equal('Ciencia da computação');
         response.body.should.have.property('level').be.equal('GRAD');
       });
       request.end(done);
@@ -286,8 +286,8 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC102'});
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'code' : '42'});
+      request.send({'name' : 'Ciencia da computação'});
       request.send({'level' : 'GRAD'});
       request.end(done);
     });
@@ -295,9 +295,9 @@ describe('course controller', function () {
     it('should raise error without token', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/courses/MC102');
-      request.send({'code' : 'MC103'});
-      request.send({'name' : 'Programação de Computadores 2'});
+      request = request.put('/courses/42');
+      request.send({'code' : '43'});
+      request.send({'name' : 'Ciencia da computação 2'});
       request.send({'level' : 'GRAD'});
       request.expect(403);
       request.end(done);
@@ -306,10 +306,10 @@ describe('course controller', function () {
     it('should raise error without changeCourse permission', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/courses/MC102');
+      request = request.put('/courses/42');
       request.set('csrf-token', 'userToken');
-      request.send({'code' : 'MC103'});
-      request.send({'name' : 'Programação de Computadores 2'});
+      request.send({'code' : '43'});
+      request.send({'name' : 'Ciencia da computação 2'});
       request.send({'level' : 'GRAD'});
       request.expect(403);
       request.end(done);
@@ -320,8 +320,8 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.put('/courses/invalid');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC103'});
-      request.send({'name' : 'Programação de Computadores 2'});
+      request.send({'code' : '43'});
+      request.send({'name' : 'Ciencia da computação 2'});
       request.send({'level' : 'GRAD'});
       request.expect(404);
       request.end(done);
@@ -330,10 +330,10 @@ describe('course controller', function () {
     it('should update', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/courses/MC102');
+      request = request.put('/courses/42');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC103'});
-      request.send({'name' : 'Programação de Computadores 2'});
+      request.send({'code' : '43'});
+      request.send({'name' : 'Ciencia da computação 2'});
       request.send({'level' : 'GRAD'});
       request.expect(200);
       request.end(done);
@@ -345,8 +345,8 @@ describe('course controller', function () {
         request = supertest(app);
         request = request.post('/courses');
         request.set('csrf-token', 'adminToken');
-        request.send({'code' : 'MC102'});
-        request.send({'name' : 'Programação de Computadores'});
+        request.send({'code' : '42'});
+        request.send({'name' : 'Ciencia da computação'});
         request.send({'level' : 'GRAD'});
         request.end(done);
       });
@@ -354,10 +354,10 @@ describe('course controller', function () {
       it('should raise error', function (done) {
         var request;
         request = supertest(app);
-        request = request.put('/courses/MC102');
+        request = request.put('/courses/42');
         request.set('csrf-token', 'adminToken');
-        request.send({'code' : 'MC103'});
-        request.send({'name' : 'Programação de Computadores 2'});
+        request.send({'code' : '43'});
+        request.send({'name' : 'Ciencia da computação 2'});
         request.send({'level' : 'GRAD'});
         request.expect(409);
         request.end(done);
@@ -373,8 +373,8 @@ describe('course controller', function () {
       request = supertest(app);
       request = request.post('/courses');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'MC102'});
-      request.send({'name' : 'Programação de Computadores'});
+      request.send({'code' : '42'});
+      request.send({'name' : 'Ciencia da computação'});
       request.send({'level' : 'GRAD'});
       request.end(done);
     });
@@ -382,7 +382,7 @@ describe('course controller', function () {
     it('should raise error without token', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/courses/MC102');
+      request = request.del('/courses/42');
       request.expect(403);
       request.end(done);
     });
@@ -390,7 +390,7 @@ describe('course controller', function () {
     it('should raise error without changeCourse permission', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/courses/MC102');
+      request = request.del('/courses/42');
       request.set('csrf-token', 'userToken');
       request.expect(403);
       request.end(done);
@@ -408,7 +408,7 @@ describe('course controller', function () {
     it('should delete', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/courses/MC102');
+      request = request.del('/courses/42');
       request.set('csrf-token', 'adminToken');
       request.expect(204);
       request.end(done);

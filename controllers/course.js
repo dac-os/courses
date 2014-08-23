@@ -18,9 +18,9 @@ Course = require('../models/course');
  * identifying and must be unique in the system. If a existing code is sent to this method, a 409 error will be raised.
  * And if no code, or name or level  is sent, a 400 error will be raised.
  *
- * @apiParam {Number} code Course code.
- * @apiParam {Number} name Course name.
- * @apiParam {Number} level Course level.
+ * @apiParam {String} code Course code.
+ * @apiParam {String} name Course name.
+ * @apiParam {String} level Course level.
  *
  * @apiErrorExample
  * HTTP/1.1 400 Bad Request
@@ -84,8 +84,8 @@ router
  * @apiSuccessExample
  * HTTP/1.1 200 OK
  * [{
- *   "code": "MC102",
- *   "name": "Programação de computadores",
+ *   "code": "42",
+ *   "name": "Ciencia da computação",
  *   "level": "GRAD",
  *   "createdAt": "2014-07-01T12:22:25.058Z",
  *   "updatedAt": "2014-07-01T12:22:25.058Z"
@@ -134,8 +134,8 @@ router
  * @apiSuccessExample
  * HTTP/1.1 200 OK
  * {
- *   "code": "MC102",
- *   "name": "Programação de computadores",
+ *   "code": "42",
+ *   "name": "Ciencia da computação",
  *   "level": "GRAD",
  *   "createdAt": "2014-07-01T12:22:25.058Z",
  *   "updatedAt": "2014-07-01T12:22:25.058Z"
@@ -162,9 +162,9 @@ router
  * original course code is sent to this method, a 409 error will be raised. And if no code, or name or level is sent, a
  * 400 error will be raised. If no course with the requested code was found, a 404 error will be raised.
  *
- * @apiParam {Number} code Course code.
- * @apiParam {Number} name Course name.
- * @apiParam {Number} level Course level.
+ * @apiParam {String} code Course code.
+ * @apiParam {String} name Course name.
+ * @apiParam {String} level Course level.
  *
  * @apiErrorExample
  * HTTP/1.1 404 Not Found
@@ -203,7 +203,7 @@ router
   course.level = request.param('level', '');
   return course.save(function updatedCourse(error) {
     if (error) {
-      error = new VError(error, 'error updating course: ""', request.params.course);
+      error = new VError(error, 'error updating course: "%s"', request.params.course);
       return next(error);
     }
     return response.status(200).end();
@@ -242,7 +242,7 @@ router
   course = request.course;
   return course.remove(function removedCourse(error) {
     if (error) {
-      error = new VError(error, 'error removing course: ""', request.params.course);
+      error = new VError(error, 'error removing course: "%s"', request.params.course);
       return next(error);
     }
     return response.status(204).end();
@@ -257,7 +257,7 @@ router.param('course', function findCourse(request, response, next, id) {
   query.where('code').equals(id);
   query.exec(function foundCourse(error, course) {
     if (error) {
-      error = new VError(error, 'error finding course: ""', course);
+      error = new VError(error, 'error finding course: "%s"', course);
       return next(error);
     }
     if (!course) {
