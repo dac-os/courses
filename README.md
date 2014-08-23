@@ -2,6 +2,13 @@
 
 catalogo do sistema da diretoria academica DAC
 
+- [catalog](#catalog)
+	- [Creates a new catalog.](#creates-a-new-catalog.)
+	- [Get catalog information.](#get-catalog-information.)
+	- [List all system catalogs.](#list-all-system-catalogs.)
+	- [Removes catalog.](#removes-catalog.)
+	- [Updates catalog information.](#updates-catalog-information.)
+	
 - [course](#course)
 	- [Creates a new course.](#creates-a-new-course.)
 	- [Get course information.](#get-course-information.)
@@ -18,6 +25,185 @@ catalogo do sistema da diretoria academica DAC
 	
 
 
+# catalog
+
+## Creates a new catalog.
+
+When creating a new catalog the user must send the catalog year. The catalog year is used for identifying and must be
+unique in the system. If a existing year is sent to this method, a 409 error will be raised. And if no year is sent,
+a 400 error will be raised.
+
+	POST /catalogs
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| year			| Number			|  Catalog year.							|
+
+### Success Response
+
+HTTP/1.1 201 Created
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 400 Bad Request
+
+```
+{
+ "year": "required"
+}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+HTTP/1.1 409 Conflict
+
+```
+{}
+
+```
+## Get catalog information.
+
+This method returns a single catalog details, the catalog year must be passed in the uri to identify the requested
+catalog. If no catalog with the requested year was found, a 404 error will be raised.
+
+	GET /catalogs/:catalog
+
+
+### Success Response
+
+HTTP/1.1 200 OK
+
+```
+{
+ "year": 2014,
+ "createdAt": "2014-07-01T12:22:25.058Z",
+ "updatedAt": "2014-07-01T12:22:25.058Z"
+}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+## List all system catalogs.
+
+This method returns an array with all catalogs in the database. The data is returned in pages of length 20. If no
+page is passed, the system will assume the requested page is page 0, otherwise the desired page must be sent.
+
+	GET /catalogs
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| page			| [Number=0]			|  Requested page.							|
+
+### Success Response
+
+HTTP/1.1 200 OK
+
+```
+[{
+ "year": 2014,
+ "createdAt": "2014-07-01T12:22:25.058Z",
+ "updatedAt": "2014-07-01T12:22:25.058Z"
+}]
+
+```
+## Removes catalog.
+
+This method removes a catalog from the system. If no catalog with the requested year was found, a 404 error will be
+raised.
+
+	DELETE /catalogs/:catalog
+
+
+### Success Response
+
+HTTP/1.1 204 No Content
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+## Updates catalog information.
+
+When updating a catalog the user must send the catalog year. If a existing year which is not the original catalog
+year is sent to this method, a 409 error will be raised. And if no year is sent, a 400 error will be raised. If no
+catalog with the requested year was found, a 404 error will be raised.
+
+	PUT /catalogs/:catalog
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| year			| Number			|  Catalog year.							|
+
+### Success Response
+
+HTTP/1.1 200 Ok
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 400 Bad Request
+
+```
+{
+ "year": "required"
+}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+HTTP/1.1 409 Conflict
+
+```
+{}
+
+```
 # course
 
 ## Creates a new course.
