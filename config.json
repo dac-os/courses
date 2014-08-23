@@ -6,5 +6,5 @@
   "ENROLLMENT_URI" : "http://localhost:8082",
   "CALENDAR_URI"   : "http://localhost:8084",
   "AUTH_URI"       : "http://localhost:8085",
-  "STATUS_URI"     : "http://localhost:8086",
+  "STATUS_URI"     : "http://localhost:8086"
 }
