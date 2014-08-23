@@ -102,9 +102,6 @@ router
  * @apiSuccess (modality) {String} code Modality code.
  * @apiSuccess (modality) {Date} createdAt Modality creation date.
  * @apiSuccess (modality) {Date} updatedAt Modality last update date.
- * @apiSuccess (catalog) {Number} year Catalog year.
- * @apiSuccess (catalog) {Date} createdAt Catalog creation date.
- * @apiSuccess (catalog) {Date} updatedAt Catalog last update date.
  * @apiSuccess (course) {String} code Course code.
  * @apiSuccess (course) {String} name Course name.
  * @apiSuccess (course) {String} level Course level.
@@ -119,11 +116,6 @@ router
  * HTTP/1.1 200 OK
  * [{
  *   "code": "AA",
- *   "catalog": {
- *     "year": 2014,
- *     "createdAt": "2014-07-01T12:22:25.058Z",
- *     "updatedAt": "2014-07-01T12:22:25.058Z"
- *   },
  *   "course": {
  *     "code": "42",
  *     "name": "Ciencia da computação",
@@ -171,9 +163,6 @@ router
  * @apiSuccess {String} code Modality code.
  * @apiSuccess {Date} createdAt Modality creation date.
  * @apiSuccess {Date} updatedAt Modality last update date.
- * @apiSuccess (catalog) {Number} year Catalog year.
- * @apiSuccess (catalog) {Date} createdAt Catalog creation date.
- * @apiSuccess (catalog) {Date} updatedAt Catalog last update date.
  * @apiSuccess (course) {String} code Course code.
  * @apiSuccess (course) {String} name Course name.
  * @apiSuccess (course) {String} level Course level.
@@ -188,11 +177,6 @@ router
  * HTTP/1.1 200 OK
  * {
  *   "code": "AA",
- *   "catalog": {
- *     "year": 2014,
- *     "createdAt": "2014-07-01T12:22:25.058Z",
- *     "updatedAt": "2014-07-01T12:22:25.058Z"
- *   },
  *   "course": {
  *     "code": "42",
  *     "name": "Ciencia da computação",

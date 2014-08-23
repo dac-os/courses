@@ -9,16 +9,16 @@ Schema = mongoose.Schema;
 schema = new Schema({
   'code'      : {
     'type'     : String,
+    'required' : true,
+    'unique'   : true
+  },
+  'modality'  : {
+    'type'     : Schema.ObjectId,
+    'ref'      : 'Modality',
     'required' : true
   },
-  'course'    : {
-    'type'     : Schema.ObjectId,
-    'ref'      : 'Course',
-    'required' : true
-  },
-  'catalog'   : {
-    'type'     : Schema.ObjectId,
-    'ref'      : 'Catalog',
+  'type'      : {
+    'type'     : String,
     'required' : true
   },
   'createdAt' : {
@@ -29,7 +29,7 @@ schema = new Schema({
     'type' : Date
   }
 }, {
-  'collection' : 'modalities',
+  'collection' : 'blocks',
   'strict'     : true,
   'toJSON'     : {
     'virtuals' : true
@@ -37,8 +37,8 @@ schema = new Schema({
 });
 
 schema.index({
-  'code'    : 1,
-  'catalog' : 1
+  'code'     : 1,
+  'modality' : 1
 }, {
   'unique' : true
 });
@@ -46,17 +46,17 @@ schema.index({
 schema.plugin(jsonSelect, {
   '_id'       : 0,
   'code'      : 1,
-  'course'    : 1,
-  'catalog'   : 0,
+  'modality'  : 0,
+  'type'      : 1,
   'createdAt' : 1,
   'updatedAt' : 1
 });
 
-schema.pre('save', function setModalityUpdatedAt(next) {
+schema.pre('save', function setBlockUpdatedAt(next) {
   'use strict';
 
   this.updatedAt = new Date();
   next();
 });
 
-module.exports = mongoose.model('Modality', schema);
+module.exports = mongoose.model('Block', schema);

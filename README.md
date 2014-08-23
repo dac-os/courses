@@ -2,6 +2,13 @@
 
 catalogo do sistema da diretoria academica DAC
 
+- [block](#block)
+	- [Creates a new block.](#creates-a-new-block.)
+	- [Get block information.](#get-block-information.)
+	- [List all system blocks.](#list-all-system-blocks.)
+	- [Removes block.](#removes-block.)
+	- [Updates block information.](#updates-block-information.)
+	
 - [catalog](#catalog)
 	- [Creates a new catalog.](#creates-a-new-catalog.)
 	- [Get catalog information.](#get-catalog-information.)
@@ -32,6 +39,191 @@ catalogo do sistema da diretoria academica DAC
 	
 
 
+# block
+
+## Creates a new block.
+
+When creating a new block the user must send the block code and type. The block code is used for identifying and must
+be unique in the system. If a existing code is sent to this method, a 409 error will be raised. And if no code or
+type is sent, a 400 error will be raised.
+
+	POST /catalogs/:catalog/modalities/:modality/blocks
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| code			| String			|  Block code.							|
+| type			| String			|  Block type.							|
+
+### Success Response
+
+HTTP/1.1 201 Created
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 400 Bad Request
+
+```
+{
+ "code": "required",
+ "type": "required"
+}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+HTTP/1.1 409 Conflict
+
+```
+{}
+
+```
+## Get block information.
+
+This method returns a single block details, the block code must be passed in the uri to identify the requested
+block. If no block with the requested code was found, a 404 error will be raised.
+
+	GET /catalogs/:catalog/modalities/:modality/blocks/:block
+
+
+### Success Response
+
+HTTP/1.1 200 OK
+
+```
+{
+ "code": "visao",
+ "type": "required",
+ "createdAt": "2014-07-01T12:22:25.058Z",
+ "updatedAt": "2014-07-01T12:22:25.058Z"
+}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+## List all system blocks.
+
+This method returns an array with all blocks in the database. The data is returned in pages of length 20. If no
+page is passed, the system will assume the requested page is page 0, otherwise the desired page must be sent.
+
+	GET /catalogs/:catalog/modalities/:modality/blocks
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| page			| [Number=0]			|  Requested page.							|
+
+### Success Response
+
+HTTP/1.1 200 OK
+
+```
+[{
+ "code": "visao",
+ "type": "required",
+ "createdAt": "2014-07-01T12:22:25.058Z",
+ "updatedAt": "2014-07-01T12:22:25.058Z"
+}]
+
+```
+## Removes block.
+
+This method removes a block from the system. If no block with the requested code was found, a 404 error will be
+raised.
+
+	DELETE /catalogs/:catalog/modalities/:modality/blocks/:block
+
+
+### Success Response
+
+HTTP/1.1 204 No Content
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+## Updates block information.
+
+When updating a block the user must send the block code and type. If a existing code which is not the original block
+code is sent to this method, a 409 error will be raised. And if no code or type is sent, a 400 error will be raised.
+If no block with the requested code was found, a 404 error will be raised.
+
+	PUT /catalogs/:catalog/modalities/:modality/blocks/:block
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| code			| String			|  Block code.							|
+| type			| String			|  Block type.							|
+
+### Success Response
+
+HTTP/1.1 200 Ok
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 400 Bad Request
+
+```
+{
+ "code": "required",
+ "type": "required"
+}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+HTTP/1.1 409 Conflict
+
+```
+{}
+
+```
 # catalog
 
 ## Creates a new catalog.
@@ -671,11 +863,6 @@ HTTP/1.1 200 OK
 ```
 {
  "code": "AA",
- "catalog": {
-   "year": 2014,
-   "createdAt": "2014-07-01T12:22:25.058Z",
-   "updatedAt": "2014-07-01T12:22:25.058Z"
- },
  "course": {
    "code": "42",
    "name": "Ciencia da computação",
@@ -716,11 +903,6 @@ HTTP/1.1 200 OK
 ```
 [{
  "code": "AA",
- "catalog": {
-   "year": 2014,
-   "createdAt": "2014-07-01T12:22:25.058Z",
-   "updatedAt": "2014-07-01T12:22:25.058Z"
- },
  "course": {
    "code": "42",
    "name": "Ciencia da computação",
