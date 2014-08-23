@@ -43,9 +43,9 @@ catalogo do sistema da diretoria academica DAC
 
 ## Creates a new block.
 
-When creating a new block the user must send the block code and type. The block code is used for identifying and must
-be unique in the system. If a existing code is sent to this method, a 409 error will be raised. And if no code or
-type is sent, a 400 error will be raised.
+When creating a new block the user must send the block code, type and disciplines. The block code is used for
+identifying and must be unique in the system. If a existing code is sent to this method, a 409 error will be raised.
+And if no code or type is sent, a 400 error will be raised.
 
 	POST /catalogs/:catalog/modalities/:modality/blocks
 
@@ -55,6 +55,7 @@ type is sent, a 400 error will be raised.
 |---------|-----------|--------------------------------------|
 | code			| String			|  Block code.							|
 | type			| String			|  Block type.							|
+| disciplines			| String []			|  Block disciplines.							|
 
 ### Success Response
 
@@ -103,6 +104,15 @@ HTTP/1.1 200 OK
 {
  "code": "visao",
  "type": "required",
+ "disciplines": [{
+   "code": "MC102",
+   "name": "Programação de computadores",
+   "credits": 6,
+   "department": "IC",
+   "description": "Programação de computadores",
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ }],
  "createdAt": "2014-07-01T12:22:25.058Z",
  "updatedAt": "2014-07-01T12:22:25.058Z"
 }
@@ -137,6 +147,15 @@ HTTP/1.1 200 OK
 [{
  "code": "visao",
  "type": "required",
+ "disciplines": [{
+   "code": "MC102",
+   "name": "Programação de computadores",
+   "credits": 6,
+   "department": "IC",
+   "description": "Programação de computadores",
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ }],
  "createdAt": "2014-07-01T12:22:25.058Z",
  "updatedAt": "2014-07-01T12:22:25.058Z"
 }]
@@ -186,6 +205,7 @@ If no block with the requested code was found, a 404 error will be raised.
 |---------|-----------|--------------------------------------|
 | code			| String			|  Block code.							|
 | type			| String			|  Block type.							|
+| disciplines			| String []			|  Block disciplines.							|
 
 ### Success Response
 

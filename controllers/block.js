@@ -1,13 +1,38 @@
-var VError, router, nconf, slug, auth, Block, Modality, Catalog;
+var VError, router, nconf, slug, auth, Block, Modality, Catalog, Discipline;
 
 VError = require('verror');
 router = require('express').Router();
 nconf = require('nconf');
 slug = require('slug');
 auth = require('dacos-auth-driver');
+async = require('async');
 Block = require('../models/block');
 Modality = require('../models/modality');
 Catalog = require('../models/catalog');
+Discipline = require('../models/discipline');
+
+router.use(function (request, response, next) {
+  'use strict';
+
+  var disciplineIds;
+  disciplineIds = request.param('disciplines');
+  if (!disciplineIds) {
+    return next();
+  }
+  return async.map(disciplineIds, function (disciplineId, next) {
+    var query;
+    query = Discipline.findOne();
+    query.where('code').equals(disciplineId);
+    query.exec(next);
+  }, function (error, disciplines) {
+    if (error) {
+      error = new VError(error, 'error finding disciplines: "%s"', disciplineIds);
+      return next(error);
+    }
+    request.disciplines = disciplines;
+    return next();
+  });
+});
 
 /**
  * @api {post} /catalogs/:catalog/modalities/:modality/blocks Creates a new block.
@@ -16,12 +41,13 @@ Catalog = require('../models/catalog');
  * @apiGroup block
  * @apiPermission changeBlock
  * @apiDescription
- * When creating a new block the user must send the block code and type. The block code is used for identifying and must
- * be unique in the system. If a existing code is sent to this method, a 409 error will be raised. And if no code or
- * type is sent, a 400 error will be raised.
+ * When creating a new block the user must send the block code, type and disciplines. The block code is used for
+ * identifying and must be unique in the system. If a existing code is sent to this method, a 409 error will be raised.
+ * And if no code or type is sent, a 400 error will be raised.
  *
  * @apiParam {String} code Block code.
  * @apiParam {String} type Block type.
+ * @apiParam {String []} disciplines Block disciplines.
  *
  * @apiErrorExample
  * HTTP/1.1 400 Bad Request
@@ -50,9 +76,10 @@ router
 
   var block;
   block = new Block({
-    'code'     : slug(request.param('code', '')),
-    'type'     : request.param('type'),
-    'modality' : request.modality
+    'code'        : slug(request.param('code', '')),
+    'type'        : request.param('type'),
+    'disciplines' : request.disciplines,
+    'modality'    : request.modality
   });
   return block.save(function createdBlock(error) {
     if (error) {
@@ -79,12 +106,28 @@ router
  * @apiSuccess (block) {String} type Block type.
  * @apiSuccess (block) {Date} createdAt Block creation date.
  * @apiSuccess (block) {Date} updatedAt Block last update date.
+ * @apiSuccess (disciplines) {String} code Discipline code.
+ * @apiSuccess (disciplines) {String} name Discipline name.
+ * @apiSuccess (disciplines) {String} credits Discipline credits.
+ * @apiSuccess (disciplines) {String} [department] Discipline department.
+ * @apiSuccess (disciplines) {String} [description] Discipline description.
+ * @apiSuccess (disciplines) {Date} createdAt Discipline creation date.
+ * @apiSuccess (disciplines) {Date} updatedAt Discipline last update date.
  *
  * @apiSuccessExample
  * HTTP/1.1 200 OK
  * [{
  *   "code": "visao",
  *   "type": "required",
+ *   "disciplines": [{
+ *     "code": "MC102",
+ *     "name": "Programação de computadores",
+ *     "credits": 6,
+ *     "department": "IC",
+ *     "description": "Programação de computadores",
+ *     "createdAt": "2014-07-01T12:22:25.058Z",
+ *     "updatedAt": "2014-07-01T12:22:25.058Z"
+ *   }],
  *   "createdAt": "2014-07-01T12:22:25.058Z",
  *   "updatedAt": "2014-07-01T12:22:25.058Z"
  * }]
@@ -99,6 +142,7 @@ router
   page = request.param('page', 0) * pageSize;
   query = Block.find();
   query.where('modality').equals(request.modality._id);
+  query.populate('disciplines');
   query.skip(page);
   query.limit(pageSize);
   return query.exec(function listedBlock(error, blocks) {
@@ -124,6 +168,13 @@ router
  * @apiSuccess {String} type Block type.
  * @apiSuccess {Date} createdAt Block creation date.
  * @apiSuccess {Date} updatedAt Block last update date.
+ * @apiSuccess (disciplines) {String} code Discipline code.
+ * @apiSuccess (disciplines) {String} name Discipline name.
+ * @apiSuccess (disciplines) {String} credits Discipline credits.
+ * @apiSuccess (disciplines) {String} [department] Discipline department.
+ * @apiSuccess (disciplines) {String} [description] Discipline description.
+ * @apiSuccess (disciplines) {Date} createdAt Discipline creation date.
+ * @apiSuccess (disciplines) {Date} updatedAt Discipline last update date.
  *
  * @apiErrorExample
  * HTTP/1.1 404 Not Found
@@ -134,6 +185,15 @@ router
  * {
  *   "code": "visao",
  *   "type": "required",
+ *   "disciplines": [{
+ *     "code": "MC102",
+ *     "name": "Programação de computadores",
+ *     "credits": 6,
+ *     "department": "IC",
+ *     "description": "Programação de computadores",
+ *     "createdAt": "2014-07-01T12:22:25.058Z",
+ *     "updatedAt": "2014-07-01T12:22:25.058Z"
+ *   }],
  *   "createdAt": "2014-07-01T12:22:25.058Z",
  *   "updatedAt": "2014-07-01T12:22:25.058Z"
  * }
@@ -161,6 +221,7 @@ router
  *
  * @apiParam {String} code Block code.
  * @apiParam {String} type Block type.
+ * @apiParam {String []} disciplines Block disciplines.
  *
  * @apiErrorExample
  * HTTP/1.1 404 Not Found
@@ -195,6 +256,7 @@ router
   block = request.block;
   block.code = slug(request.param('code', ''));
   block.type = request.param('type');
+  block.disciplines = request.disciplines;
   return block.save(function updatedBlock(error) {
     if (error) {
       error = new VError(error, 'error updating block: ""', request.params.block);
@@ -291,6 +353,7 @@ router.param('block', function findBlock(request, response, next, id) {
   query = Block.findOne();
   query.where('code').equals(id);
   query.where('modality').equals(request.modality._id);
+  query.populate('disciplines');
   query.exec(function foundBlock(error, block) {
     if (error) {
       error = new VError(error, 'error finding block: ""', block);

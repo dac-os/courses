@@ -7,25 +7,32 @@ nconf = require('nconf');
 Schema = mongoose.Schema;
 
 schema = new Schema({
-  'code'      : {
+  'code'        : {
     'type'     : String,
     'required' : true,
     'unique'   : true
   },
-  'modality'  : {
+  'modality'    : {
     'type'     : Schema.ObjectId,
     'ref'      : 'Modality',
     'required' : true
   },
-  'type'      : {
+  'type'        : {
     'type'     : String,
     'required' : true
   },
-  'createdAt' : {
+  'disciplines' : [
+    {
+      'type'     : Schema.ObjectId,
+      'ref'      : 'Discipline',
+      'required' : true
+    }
+  ],
+  'createdAt'   : {
     'type'    : Date,
     'default' : Date.now
   },
-  'updatedAt' : {
+  'updatedAt'   : {
     'type' : Date
   }
 }, {
@@ -44,12 +51,13 @@ schema.index({
 });
 
 schema.plugin(jsonSelect, {
-  '_id'       : 0,
-  'code'      : 1,
-  'modality'  : 0,
-  'type'      : 1,
-  'createdAt' : 1,
-  'updatedAt' : 1
+  '_id'         : 0,
+  'code'        : 1,
+  'modality'    : 0,
+  'type'        : 1,
+  'disciplines' : 1,
+  'createdAt'   : 1,
+  'updatedAt'   : 1
 });
 
 schema.pre('save', function setBlockUpdatedAt(next) {
