@@ -35,6 +35,7 @@ app.use(function (request, response, next) {
 app.use(require('./controllers/course'));
 app.use(require('./controllers/discipline'));
 app.use(require('./controllers/catalog'));
+app.use(require('./controllers/modality'));
 app.use(function handleErrors(error, request, response, next) {
   'use strict';
 

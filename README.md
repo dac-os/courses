@@ -23,6 +23,13 @@ catalogo do sistema da diretoria academica DAC
 	- [Removes discipline.](#removes-discipline.)
 	- [Updates discipline information.](#updates-discipline-information.)
 	
+- [modality](#modality)
+	- [Creates a new modality.](#creates-a-new-modality.)
+	- [Get modality information.](#get-modality-information.)
+	- [List all system modalities.](#list-all-system-modalities.)
+	- [Removes modality.](#removes-modality.)
+	- [Updates modality information.](#updates-modality-information.)
+	
 
 
 # catalog
@@ -580,6 +587,227 @@ HTTP/1.1 400 Bad Request
  "code": "required",
  "name": "required",
  "credits": "required"
+}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+HTTP/1.1 409 Conflict
+
+```
+{}
+
+```
+# modality
+
+## Creates a new modality.
+
+When creating a new modality the user must send the modality code and course. The modality code is used for
+identifying and must be unique in the catalog. If a existing code is sent to this method, a 409 error will be raised.
+And if no code or course is sent, a 400 error will be raised.
+
+	POST /catalogs/:catalog/modalities
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| code			| String			|  Modality code.							|
+| course			| String			|  Modality course code.							|
+
+### Success Response
+
+HTTP/1.1 201 Created
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 400 Bad Request
+
+```
+{
+ "code": "required",
+ "course": "required"
+}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 409 Conflict
+
+```
+{}
+
+```
+## Get modality information.
+
+This method returns a single modality details, the modality code must be passed in the uri to identify the requested
+modality. If no modality with the requested code was found, a 404 error will be raised.
+
+	GET /catalogs/:catalog/modalities/:modality
+
+
+### Success Response
+
+HTTP/1.1 200 OK
+
+```
+{
+ "code": "AA",
+ "catalog": {
+   "year": 2014,
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ },
+ "course": {
+   "code": "42",
+   "name": "Ciencia da computação",
+   "level": "GRAD",
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ },
+ "createdAt": "2014-07-01T12:22:25.058Z",
+ "updatedAt": "2014-07-01T12:22:25.058Z"
+}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+## List all system modalities.
+
+This method returns an array with all modalities in the database. The data is returned in pages of length 20. If no
+page is passed, the system will assume the requested page is page 0, otherwise the desired page must be sent.
+
+	GET /catalogs/:catalog/modalities
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| page			| [Number=0]			|  Requested page.							|
+
+### Success Response
+
+HTTP/1.1 200 OK
+
+```
+[{
+ "code": "AA",
+ "catalog": {
+   "year": 2014,
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ },
+ "course": {
+   "code": "42",
+   "name": "Ciencia da computação",
+   "level": "GRAD",
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ },
+ "createdAt": "2014-07-01T12:22:25.058Z",
+ "updatedAt": "2014-07-01T12:22:25.058Z"
+}]
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+## Removes modality.
+
+This method removes a modality from the system. If no modality with the requested code was found, a 404 error will be
+raised.
+
+	DELETE /catalogs/:catalog/modalities/:modality
+
+
+### Success Response
+
+HTTP/1.1 204 No Content
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+## Updates modality information.
+
+When updating a modality the user must send the modality code and course. If a existing code which is not the
+original modality code is sent to this method, a 409 error will be raised. And if no code or course is sent, a 400
+error will be raised. If no modality with the requested code was found, a 404 error will be raised.
+
+	PUT /catalogs/:catalog/modalities/:modality
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| code			| String			|  Modality code.							|
+| course			| String			|  Modality course code.							|
+
+### Success Response
+
+HTTP/1.1 200 Ok
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 400 Bad Request
+
+```
+{
+ "code": "required",
+ "course": "required"
 }
 
 ```
