@@ -17,7 +17,7 @@ nock(nconf.get('AUTH_URI'), {
   'profile'          : {
     'name'        : 'admin',
     'slug'        : 'admin',
-    'permissions' : ['changeCourse', 'changeDiscipline', 'changeCatalog', 'changeModality', 'changeBlock']
+    'permissions' : ['changeCourse', 'changeDiscipline', 'changeCatalog', 'changeModality', 'changeBlock', 'changeOffering']
   }
 });
 
