@@ -74,9 +74,10 @@ router
 
   var modality;
   modality = new Modality({
-    'code'    : slug(request.param('code', '')),
-    'course'  : request.course,
-    'catalog' : request.catalog
+    'code'       : slug(request.param('code', '')),
+    'courseCode' : request.course ? request.course.code : null,
+    'course'     : request.course,
+    'catalog'    : request.catalog
   });
   return modality.save(function createdModality(error) {
     if (error) {
@@ -245,6 +246,7 @@ router
   modality = request.modality;
   modality.code = slug(request.param('code', ''));
   modality.course = request.course;
+  modality.courseCode = request.course ? request.course.code : null;
   return modality.save(function updatedModality(error) {
     if (error) {
       error = new VError(error, 'error updating modality: ""', request.params.modality);
@@ -315,9 +317,11 @@ router.param('catalog', function findCatalog(request, response, next, id) {
 router.param('modality', function findModality(request, response, next, id) {
   'use strict';
 
-  var query;
+  var query, code;
+  code = id.split('-');
   query = Modality.findOne();
-  query.where('code').equals(id);
+  query.where('courseCode').equals(code[0]);
+  query.where('code').equals(code[1]);
   query.where('catalog').equals(request.catalog._id);
   query.populate('course');
   query.populate('catalog');

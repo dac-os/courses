@@ -267,7 +267,7 @@ describe('modality controller', function () {
     it('should show', function (done) {
       var request;
       request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/AA');
+      request = request.get('/catalogs/2014/modalities/42-AA');
       request.expect(200);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('AA');
@@ -295,7 +295,7 @@ describe('modality controller', function () {
     it('should raise error without token', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/AA');
+      request = request.put('/catalogs/2014/modalities/42-AA');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
       request.expect(403);
@@ -305,7 +305,7 @@ describe('modality controller', function () {
     it('should raise error without changeModality permission', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/AA');
+      request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'userToken');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
@@ -316,7 +316,7 @@ describe('modality controller', function () {
     it('should raise error with invalid catalog code', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2012/modalities/AA');
+      request = request.put('/catalogs/2012/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
@@ -338,7 +338,7 @@ describe('modality controller', function () {
     it('should raise error without code', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/AA');
+      request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.send({'course' : '43'});
       request.expect(400);
@@ -351,7 +351,7 @@ describe('modality controller', function () {
     it('should raise error without course', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/AA');
+      request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
       request.expect(400);
@@ -364,7 +364,7 @@ describe('modality controller', function () {
     it('should raise error without code and course', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/AA');
+      request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.expect(400);
       request.expect(function (response) {
@@ -377,7 +377,7 @@ describe('modality controller', function () {
     it('should update', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/AA');
+      request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
@@ -399,7 +399,7 @@ describe('modality controller', function () {
       it('should raise error', function (done) {
         var request;
         request = supertest(app);
-        request = request.put('/catalogs/2014/modalities/AA');
+        request = request.put('/catalogs/2014/modalities/42-AA');
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AB'});
         request.send({'course' : '43'});
@@ -425,7 +425,7 @@ describe('modality controller', function () {
     it('should raise error without token', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/AA');
+      request = request.del('/catalogs/2014/modalities/42-AA');
       request.expect(403);
       request.end(done);
     });
@@ -433,7 +433,7 @@ describe('modality controller', function () {
     it('should raise error without changeModality permission', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/AA');
+      request = request.del('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'userToken');
       request.expect(403);
       request.end(done);
@@ -442,7 +442,7 @@ describe('modality controller', function () {
     it('should raise error with invalid catalog code', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/catalogs/2012/modalities/AA');
+      request = request.del('/catalogs/2012/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.expect(404);
       request.end(done);
@@ -460,7 +460,7 @@ describe('modality controller', function () {
     it('should delete', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/AA');
+      request = request.del('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.expect(204);
       request.end(done);

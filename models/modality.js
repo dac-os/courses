@@ -7,25 +7,29 @@ nconf = require('nconf');
 Schema = mongoose.Schema;
 
 schema = new Schema({
-  'code'      : {
+  'code'       : {
     'type'     : String,
     'required' : true
   },
-  'course'    : {
+  'courseCode' : {
+    'type'     : String,
+    'required' : true
+  },
+  'course'     : {
     'type'     : Schema.ObjectId,
     'ref'      : 'Course',
     'required' : true
   },
-  'catalog'   : {
+  'catalog'    : {
     'type'     : Schema.ObjectId,
     'ref'      : 'Catalog',
     'required' : true
   },
-  'createdAt' : {
+  'createdAt'  : {
     'type'    : Date,
     'default' : Date.now
   },
-  'updatedAt' : {
+  'updatedAt'  : {
     'type' : Date
   }
 }, {
@@ -44,12 +48,13 @@ schema.index({
 });
 
 schema.plugin(jsonSelect, {
-  '_id'       : 0,
-  'code'      : 1,
-  'course'    : 1,
-  'catalog'   : 0,
-  'createdAt' : 1,
-  'updatedAt' : 1
+  '_id'        : 0,
+  'code'       : 1,
+  'courseCode' : 0,
+  'course'     : 1,
+  'catalog'    : 0,
+  'createdAt'  : 1,
+  'updatedAt'  : 1
 });
 
 schema.pre('save', function setModalityUpdatedAt(next) {
