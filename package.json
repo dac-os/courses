@@ -41,7 +41,6 @@
     "dacos-auth-driver": "dac-os/auth-driver.git",
     "dacos-history-driver": "dac-os/history-driver.git",
     "dacos-calendar-driver": "dac-os/calendar-driver.git",
-    "dacos-status-driver": "dac-os/status-driver.git",
     "dacos-enrollment-driver": "dac-os/enrollment-driver.git"
   },
   "config": {
