@@ -63,6 +63,7 @@ And if no code or type is sent, a 400 error will be raised.
 | code			| String			|  Block code.							|
 | type			| String			|  Block type.							|
 | disciplines			| String []			|  Block disciplines.							|
+| masks			| String []			|  Block masks.							|
 
 ### Success Response
 
@@ -111,6 +112,7 @@ HTTP/1.1 200 OK
 {
  "code": "visao",
  "type": "required",
+ "masks": ["mc---"],
  "disciplines": [{
    "code": "MC102",
    "name": "Programação de computadores",
@@ -154,6 +156,7 @@ HTTP/1.1 200 OK
 [{
  "code": "visao",
  "type": "required",
+ "masks": ["mc---"],
  "disciplines": [{
    "code": "MC102",
    "name": "Programação de computadores",
@@ -213,6 +216,7 @@ If no block with the requested code was found, a 404 error will be raised.
 | code			| String			|  Block code.							|
 | type			| String			|  Block type.							|
 | disciplines			| String []			|  Block disciplines.							|
+| masks			| String []			|  Block masks.							|
 
 ### Success Response
 

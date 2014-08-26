@@ -48,6 +48,7 @@ router.use(function (request, response, next) {
  * @apiParam {String} code Block code.
  * @apiParam {String} type Block type.
  * @apiParam {String []} disciplines Block disciplines.
+ * @apiParam {String []} masks Block masks.
  *
  * @apiErrorExample
  * HTTP/1.1 400 Bad Request
@@ -79,7 +80,8 @@ router
     'code'        : slug(request.param('code', '')),
     'type'        : request.param('type'),
     'disciplines' : request.disciplines,
-    'modality'    : request.modality
+    'modality'    : request.modality,
+    'masks'       : request.param('masks')
   });
   return block.save(function createdBlock(error) {
     if (error) {
@@ -104,6 +106,7 @@ router
  *
  * @apiSuccess (block) {String} code Block code.
  * @apiSuccess (block) {String} type Block type.
+ * @apiSuccess (block) {String []} masks Block masks.
  * @apiSuccess (block) {Date} createdAt Block creation date.
  * @apiSuccess (block) {Date} updatedAt Block last update date.
  * @apiSuccess (disciplines) {String} code Discipline code.
@@ -119,6 +122,7 @@ router
  * [{
  *   "code": "visao",
  *   "type": "required",
+ *   "masks": ["mc---"],
  *   "disciplines": [{
  *     "code": "MC102",
  *     "name": "Programação de computadores",
@@ -166,6 +170,7 @@ router
  *
  * @apiSuccess {String} code Block code.
  * @apiSuccess {String} type Block type.
+ * @apiSuccess {String []} masks Block masks.
  * @apiSuccess {Date} createdAt Block creation date.
  * @apiSuccess {Date} updatedAt Block last update date.
  * @apiSuccess (disciplines) {String} code Discipline code.
@@ -185,6 +190,7 @@ router
  * {
  *   "code": "visao",
  *   "type": "required",
+ *   "masks": ["mc---"],
  *   "disciplines": [{
  *     "code": "MC102",
  *     "name": "Programação de computadores",
@@ -222,6 +228,7 @@ router
  * @apiParam {String} code Block code.
  * @apiParam {String} type Block type.
  * @apiParam {String []} disciplines Block disciplines.
+ * @apiParam {String []} masks Block masks.
  *
  * @apiErrorExample
  * HTTP/1.1 404 Not Found
@@ -257,6 +264,7 @@ router
   block.code = slug(request.param('code', ''));
   block.type = request.param('type');
   block.disciplines = request.disciplines;
+  block.masks = request.param('masks');
   return block.save(function updatedBlock(error) {
     if (error) {
       error = new VError(error, 'error updating block: ""', request.params.block);
