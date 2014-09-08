@@ -1,6 +1,6 @@
 /*globals describe, before, beforeEach, it, after*/
 require('should');
-var supertest, nock, nconf, app, Block, Modality, Catalog, Course, Discipline;
+var supertest, nock, nconf, app, Block, Modality, Catalog, Course;
 
 supertest = require('supertest');
 app = require('../index.js');
@@ -10,7 +10,6 @@ Block = require('../models/block');
 Modality = require('../models/modality');
 Catalog = require('../models/catalog');
 Course = require('../models/course');
-Discipline = require('../models/discipline');
 
 nock(nconf.get('AUTH_URI'), {
   'reqheaders' : {'csrf-token' : 'adminToken'}
@@ -44,7 +43,6 @@ describe('block controller', function () {
   before(Catalog.remove.bind(Catalog));
   before(Course.remove.bind(Course));
   before(Modality.remove.bind(Modality));
-  before(Discipline.remove.bind(Discipline));
 
   before(function (done) {
     var request;
@@ -84,19 +82,6 @@ describe('block controller', function () {
     request.set('csrf-token', 'adminToken');
     request.send({'code' : 'AA'});
     request.send({'course' : '42'});
-    request.end(done);
-  });
-
-  before(function (done) {
-    var request;
-    request = supertest(app);
-    request = request.post('/disciplines');
-    request.set('csrf-token', 'adminToken');
-    request.send({'code' : 'MC102'});
-    request.send({'name' : 'Programação de computadores'});
-    request.send({'credits' : 6});
-    request.send({'department' : 'IC'});
-    request.send({'description' : 'Programação de computadores'});
     request.end(done);
   });
 
@@ -289,7 +274,6 @@ describe('block controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'visao'});
       request.send({'type' : 'required'});
-      request.send({'disciplines' : ['MC102']});
       request.end(done);
     });
 
@@ -325,12 +309,6 @@ describe('block controller', function () {
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('visao');
         response.body.should.have.property('type').be.equal('required');
-        response.body.should.have.property('disciplines').be.instanceOf(Array).with.lengthOf(1);
-        response.body.disciplines.every(function (discipline) {
-          discipline.should.have.property('code');
-          discipline.should.have.property('name');
-          discipline.should.have.property('credits');
-        });
       });
       request.end(done);
     });
