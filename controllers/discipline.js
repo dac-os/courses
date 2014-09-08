@@ -1,11 +1,35 @@
-var VError, router, nconf, slug, auth, Discipline;
+var VError, router, nconf, slug, auth, async, Discipline;
 
 VError = require('verror');
 router = require('express').Router();
 nconf = require('nconf');
 slug = require('slug');
 auth = require('dacos-auth-driver');
+async = require('async');
 Discipline = require('../models/discipline');
+
+router.use(function (request, response, next) {
+  'use strict';
+
+  var requirementIds;
+  requirementIds = request.param('requirements');
+  if (!requirementIds) {
+    return next();
+  }
+  return async.map(requirementIds, function (requirementId, next) {
+    var query;
+    query = Discipline.findOne();
+    query.where('code').equals(requirementId);
+    query.exec(next);
+  }, function (error, requirements) {
+    if (error) {
+      error = new VError(error, 'error finding disciplines: "%s"', requirementIds);
+      return next(error);
+    }
+    request.requirements = requirements;
+    return next();
+  });
+});
 
 /**
  * @api {post} /disciplines Creates a new discipline.
@@ -23,6 +47,7 @@ Discipline = require('../models/discipline');
  * @apiParam {String} credits Discipline credits.
  * @apiParam {String} [department] Discipline department.
  * @apiParam {String} [description] Discipline description.
+ * @apiParam {String []} [requirements] Discipline requirements.
  *
  * @apiErrorExample
  * HTTP/1.1 400 Bad Request
@@ -52,11 +77,12 @@ router
 
   var discipline;
   discipline = new Discipline({
-    'code'        : slug(request.param('code', '')),
-    'name'        : request.param('name'),
-    'credits'     : request.param('credits'),
-    'department'  : request.param('department'),
-    'description' : request.param('description')
+    'code'         : slug(request.param('code', '')),
+    'name'         : request.param('name'),
+    'credits'      : request.param('credits'),
+    'department'   : request.param('department'),
+    'description'  : request.param('description'),
+    'requirements' : request.requirements
   });
   return discipline.save(function createdDiscipline(error) {
     if (error) {
@@ -84,6 +110,7 @@ router
  * @apiSuccess (discipline) {String} credits Discipline credits.
  * @apiSuccess (discipline) {String} [department] Discipline department.
  * @apiSuccess (discipline) {String} [description] Discipline description.
+ * @apiSuccess (discipline) {Array} [requirements] Discipline requirements.
  * @apiSuccess (discipline) {Date} createdAt Discipline creation date.
  * @apiSuccess (discipline) {Date} updatedAt Discipline last update date.
  *
@@ -95,6 +122,15 @@ router
  *   "credits": 6,
  *   "department": "IC",
  *   "description": "Programação de computadores",
+ *   "requirements": [{
+ *     "code": "MC001",
+ *     "name": "Fundamentos de computação",
+ *     "credits": 6,
+ *     "department": "IC",
+ *     "description": "Fundamentos de computação",
+ *     "createdAt": "2014-07-01T12:22:25.058Z",
+ *     "updatedAt": "2014-07-01T12:22:25.058Z"
+ *   }],
  *   "createdAt": "2014-07-01T12:22:25.058Z",
  *   "updatedAt": "2014-07-01T12:22:25.058Z"
  * }]
@@ -108,6 +144,7 @@ router
   pageSize = nconf.get('PAGE_SIZE');
   page = request.param('page', 0) * pageSize;
   query = Discipline.find();
+  query.populate('requirements');
   query.skip(page);
   query.limit(pageSize);
   return query.exec(function listedDiscipline(error, disciplines) {
@@ -134,6 +171,7 @@ router
  * @apiSuccess {String} credits Discipline credits.
  * @apiSuccess {String} [department] Discipline department.
  * @apiSuccess {String} [description] Discipline description.
+ * @apiSuccess {Array} [requirements] Discipline requirements.
  * @apiSuccess {Date} createdAt Discipline creation date.
  * @apiSuccess {Date} updatedAt Discipline last update date.
  *
@@ -149,6 +187,15 @@ router
  *   "credits": 6,
  *   "department": "IC",
  *   "description": "Programação de computadores",
+ *   "requirements": [{
+ *     "code": "MC001",
+ *     "name": "Fundamentos de computação",
+ *     "credits": 6,
+ *     "department": "IC",
+ *     "description": "Fundamentos de computação",
+ *     "createdAt": "2014-07-01T12:22:25.058Z",
+ *     "updatedAt": "2014-07-01T12:22:25.058Z"
+ *   }],
  *   "createdAt": "2014-07-01T12:22:25.058Z",
  *   "updatedAt": "2014-07-01T12:22:25.058Z"
  * }
@@ -180,6 +227,7 @@ router
  * @apiParam {String} credits Discipline credits.
  * @apiParam {String} [department] Discipline department.
  * @apiParam {String} [description] Discipline description.
+ * @apiParam {String []} [requirements] Discipline requirements.
  *
  * @apiErrorExample
  * HTTP/1.1 404 Not Found
@@ -218,6 +266,7 @@ router
   discipline.credits = request.param('credits');
   discipline.department = request.param('department');
   discipline.description = request.param('description');
+  discipline.requirements = request.requirements;
   return discipline.save(function updatedDiscipline(error) {
     if (error) {
       error = new VError(error, 'error updating discipline: "%s"', request.params.discipline);
@@ -272,6 +321,7 @@ router.param('discipline', function findDiscipline(request, response, next, id) 
   var query;
   query = Discipline.findOne();
   query.where('code').equals(id);
+  query.populate('requirements');
   query.exec(function foundDiscipline(error, discipline) {
     if (error) {
       error = new VError(error, 'error finding discipline: "%s"', discipline);

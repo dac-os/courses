@@ -7,30 +7,37 @@ nconf = require('nconf');
 Schema = mongoose.Schema;
 
 schema = new Schema({
-  'code'        : {
+  'code'         : {
     'type'     : String,
     'required' : true,
     'unique'   : true
   },
-  'name'        : {
+  'name'         : {
     'type'     : String,
     'required' : true
   },
-  'credits'     : {
+  'credits'      : {
     'type'     : Number,
     'required' : true
   },
-  'department'  : {
+  'department'   : {
     'type' : String
   },
-  'description' : {
+  'description'  : {
     'type' : String
   },
-  'createdAt'   : {
+  'requirements' : [
+    {
+      'type'     : Schema.ObjectId,
+      'ref'      : 'Discipline',
+      'required' : true
+    }
+  ],
+  'createdAt'    : {
     'type'    : Date,
     'default' : Date.now
   },
-  'updatedAt'   : {
+  'updatedAt'    : {
     'type' : Date
   }
 }, {
@@ -42,14 +49,15 @@ schema = new Schema({
 });
 
 schema.plugin(jsonSelect, {
-  '_id'         : 0,
-  'code'        : 1,
-  'name'        : 1,
-  'credits'     : 1,
-  'department'  : 1,
-  'description' : 1,
-  'createdAt'   : 1,
-  'updatedAt'   : 1
+  '_id'          : 0,
+  'code'         : 1,
+  'name'         : 1,
+  'credits'      : 1,
+  'department'   : 1,
+  'description'  : 1,
+  'requirements' : 1,
+  'createdAt'    : 1,
+  'updatedAt'    : 1
 });
 
 schema.pre('save', function setDisciplineUpdatedAt(next) {

@@ -40,6 +40,19 @@ describe('discipline controller', function () {
   describe('create', function () {
     before(Discipline.remove.bind(Discipline));
 
+    before(function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'MC001'});
+      request.send({'name' : 'Fundamentos de programação'});
+      request.send({'credits' : 6});
+      request.send({'department' : 'IC'});
+      request.send({'description' : 'Fundamentos de programação'});
+      request.end(done);
+    });
+
     it('should raise error without token', function (done) {
       var request;
       request = supertest(app);
@@ -175,6 +188,7 @@ describe('discipline controller', function () {
       request.send({'credits' : 6});
       request.send({'department' : 'IC'});
       request.send({'description' : 'Programação de computadores'});
+      request.send({'requirements' : ['MC001']});
       request.expect(201);
       request.end(done);
     });
@@ -219,11 +233,25 @@ describe('discipline controller', function () {
       request = supertest(app);
       request = request.post('/disciplines');
       request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'MC001'});
+      request.send({'name' : 'Fundamentos de programação'});
+      request.send({'credits' : 6});
+      request.send({'department' : 'IC'});
+      request.send({'description' : 'Fundamentos de programação'});
+      request.end(done);
+    });
+
+    before(function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines');
+      request.set('csrf-token', 'adminToken');
       request.send({'code' : 'MC102'});
       request.send({'name' : 'Programação de computadores'});
       request.send({'credits' : 6});
       request.send({'department' : 'IC'});
       request.send({'description' : 'Programação de computadores'});
+      request.send({'requirements' : ['MC001']});
       request.end(done);
     });
 
@@ -233,7 +261,7 @@ describe('discipline controller', function () {
       request = request.get('/disciplines');
       request.expect(200);
       request.expect(function (response) {
-        response.body.should.be.instanceOf(Array).with.lengthOf(1);
+        response.body.should.be.instanceOf(Array).with.lengthOf(2);
         response.body.every(function (discipline) {
           discipline.should.have.property('code');
         });
@@ -262,11 +290,25 @@ describe('discipline controller', function () {
       request = supertest(app);
       request = request.post('/disciplines');
       request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'MC001'});
+      request.send({'name' : 'Fundamentos de programação'});
+      request.send({'credits' : 6});
+      request.send({'department' : 'IC'});
+      request.send({'description' : 'Fundamentos de programação'});
+      request.end(done);
+    });
+
+    before(function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines');
+      request.set('csrf-token', 'adminToken');
       request.send({'code' : 'MC102'});
       request.send({'name' : 'Programação de computadores'});
       request.send({'credits' : 6});
       request.send({'department' : 'IC'});
       request.send({'description' : 'Programação de computadores'});
+      request.send({'requirements' : ['MC001']});
       request.end(done);
     });
 
@@ -302,11 +344,25 @@ describe('discipline controller', function () {
       request = supertest(app);
       request = request.post('/disciplines');
       request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'MC001'});
+      request.send({'name' : 'Fundamentos de programação'});
+      request.send({'credits' : 6});
+      request.send({'department' : 'IC'});
+      request.send({'description' : 'Fundamentos de programação'});
+      request.end(done);
+    });
+
+    before(function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines');
+      request.set('csrf-token', 'adminToken');
       request.send({'code' : 'MC102'});
       request.send({'name' : 'Programação de computadores'});
       request.send({'credits' : 6});
       request.send({'department' : 'IC'});
       request.send({'description' : 'Programação de computadores'});
+      request.send({'requirements' : ['MC001']});
       request.end(done);
     });
 
@@ -412,11 +468,25 @@ describe('discipline controller', function () {
       request = supertest(app);
       request = request.post('/disciplines');
       request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'MC001'});
+      request.send({'name' : 'Fundamentos de programação'});
+      request.send({'credits' : 6});
+      request.send({'department' : 'IC'});
+      request.send({'description' : 'Fundamentos de programação'});
+      request.end(done);
+    });
+
+    before(function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines');
+      request.set('csrf-token', 'adminToken');
       request.send({'code' : 'MC102'});
       request.send({'name' : 'Programação de computadores'});
       request.send({'credits' : 6});
       request.send({'department' : 'IC'});
       request.send({'description' : 'Programação de computadores'});
+      request.send({'requirements' : ['MC001']});
       request.end(done);
     });
 
