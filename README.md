@@ -44,15 +44,22 @@ catalogo do sistema da diretoria academica DAC
 	- [Removes offering.](#removes-offering.)
 	- [Updates offering information.](#updates-offering-information.)
 	
+- [requirement](#requirement)
+	- [Creates a new requirement.](#creates-a-new-requirement.)
+	- [Get requirement information.](#get-requirement-information.)
+	- [List all system requirements.](#list-all-system-requirements.)
+	- [Removes requirement.](#removes-requirement.)
+	- [Updates requirement information.](#updates-requirement-information.)
+	
 
 
 # block
 
 ## Creates a new block.
 
-When creating a new block the user must send the block code, type and disciplines. The block code is used for
-identifying and must be unique in the system. If a existing code is sent to this method, a 409 error will be raised.
-And if no code or type is sent, a 400 error will be raised.
+When creating a new block the user must send the block code, type and credits. The block code is used for identifying
+and must be unique in the system. If a existing code is sent to this method, a 409 error will be raised. And if no
+code or type is sent, a 400 error will be raised.
 
 	POST /catalogs/:catalog/modalities/:modality/blocks
 
@@ -62,8 +69,7 @@ And if no code or type is sent, a 400 error will be raised.
 |---------|-----------|--------------------------------------|
 | code			| String			|  Block code.							|
 | type			| String			|  Block type.							|
-| disciplines			| String []			|  Block disciplines.							|
-| masks			| String []			|  Block masks.							|
+| credits			| Number			| **optional** Block credits.							|
 
 ### Success Response
 
@@ -112,16 +118,7 @@ HTTP/1.1 200 OK
 {
  "code": "visao",
  "type": "required",
- "masks": ["mc---"],
- "disciplines": [{
-   "code": "MC102",
-   "name": "Programação de computadores",
-   "credits": 6,
-   "department": "IC",
-   "description": "Programação de computadores",
-   "createdAt": "2014-07-01T12:22:25.058Z",
-   "updatedAt": "2014-07-01T12:22:25.058Z"
- }],
+ "credits": "6",
  "createdAt": "2014-07-01T12:22:25.058Z",
  "updatedAt": "2014-07-01T12:22:25.058Z"
 }
@@ -156,16 +153,7 @@ HTTP/1.1 200 OK
 [{
  "code": "visao",
  "type": "required",
- "masks": ["mc---"],
- "disciplines": [{
-   "code": "MC102",
-   "name": "Programação de computadores",
-   "credits": 6,
-   "department": "IC",
-   "description": "Programação de computadores",
-   "createdAt": "2014-07-01T12:22:25.058Z",
-   "updatedAt": "2014-07-01T12:22:25.058Z"
- }],
+ "credits": "6",
  "createdAt": "2014-07-01T12:22:25.058Z",
  "updatedAt": "2014-07-01T12:22:25.058Z"
 }]
@@ -203,9 +191,9 @@ HTTP/1.1 403 Forbidden
 ```
 ## Updates block information.
 
-When updating a block the user must send the block code and type. If a existing code which is not the original block
-code is sent to this method, a 409 error will be raised. And if no code or type is sent, a 400 error will be raised.
-If no block with the requested code was found, a 404 error will be raised.
+When updating a block the user must send the block code, type and credits. If a existing code which is not the
+original block code is sent to this method, a 409 error will be raised. And if no code or type is sent, a 400 error
+will be raised. If no block with the requested code was found, a 404 error will be raised.
 
 	PUT /catalogs/:catalog/modalities/:modality/blocks/:block
 
@@ -215,8 +203,7 @@ If no block with the requested code was found, a 404 error will be raised.
 |---------|-----------|--------------------------------------|
 | code			| String			|  Block code.							|
 | type			| String			|  Block type.							|
-| disciplines			| String []			|  Block disciplines.							|
-| masks			| String []			|  Block masks.							|
+| credits			| Number			| **optional** Block credits.							|
 
 ### Success Response
 
@@ -644,6 +631,7 @@ a 409 error will be raised. And if no code, or name or credits are sent, a 400 e
 | credits			| String			|  Discipline credits.							|
 | department			| String			| **optional** Discipline department.							|
 | description			| String			| **optional** Discipline description.							|
+| requirements			| String []			| **optional** Discipline requirements.							|
 
 ### Success Response
 
@@ -696,6 +684,15 @@ HTTP/1.1 200 OK
  "credits": 6,
  "department": "IC",
  "description": "Programação de computadores",
+ "requirements": [{
+   "code": "MC001",
+   "name": "Fundamentos de computação",
+   "credits": 6,
+   "department": "IC",
+   "description": "Fundamentos de computação",
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ }],
  "createdAt": "2014-07-01T12:22:25.058Z",
  "updatedAt": "2014-07-01T12:22:25.058Z"
 }
@@ -733,6 +730,15 @@ HTTP/1.1 200 OK
  "credits": 6,
  "department": "IC",
  "description": "Programação de computadores",
+ "requirements": [{
+   "code": "MC001",
+   "name": "Fundamentos de computação",
+   "credits": 6,
+   "department": "IC",
+   "description": "Fundamentos de computação",
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ }],
  "createdAt": "2014-07-01T12:22:25.058Z",
  "updatedAt": "2014-07-01T12:22:25.058Z"
 }]
@@ -786,6 +792,7 @@ a 404 error will be raised.
 | credits			| String			|  Discipline credits.							|
 | department			| String			| **optional** Discipline department.							|
 | description			| String			| **optional** Discipline description.							|
+| requirements			| String []			| **optional** Discipline requirements.							|
 
 ### Success Response
 
@@ -1224,6 +1231,208 @@ HTTP/1.1 400 Bad Request
  "code": "required",
  "year": "required",
  "period": "required"
+}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+HTTP/1.1 409 Conflict
+
+```
+{}
+
+```
+# requirement
+
+## Creates a new requirement.
+
+When creating a new requirement the user must send the requirement suggestedSemester, discipline and mask. The
+requirement code is used for identifying and must be unique in the system. If a existing code is sent to this method,
+a 409 error will be raised. And if no discipline or mask is sent, a 400 error will be raised.
+
+	POST /catalogs/:catalog/modalities/:modality/blocks/:block/requirements
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| discipline			| String			|  Requirement discipline code.							|
+| mask			| String			|  Requirement discipline mask.							|
+| suggestedSemester			| Number			|  Requirement suggested semester.							|
+
+### Success Response
+
+HTTP/1.1 201 Created
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 400 Bad Request
+
+```
+{
+ "code": "required"
+}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+HTTP/1.1 409 Conflict
+
+```
+{}
+
+```
+## Get requirement information.
+
+This method returns a single requirement details, the requirement code must be passed in the uri to identify the requested
+requirement. If no requirement with the requested code was found, a 404 error will be raised.
+
+	GET /catalogs/:catalog/modalities/:modality/blocks/:block/requirements/:requirement
+
+
+### Success Response
+
+HTTP/1.1 200 OK
+
+```
+{
+ "discipline": {
+   "code": "MC001",
+   "name": "Fundamentos de computação",
+   "credits": 6,
+   "department": "IC",
+   "description": "Fundamentos de computação",
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ },
+ "suggestedSemester": 2,
+ "createdAt": "2014-07-01T12:22:25.058Z",
+ "updatedAt": "2014-07-01T12:22:25.058Z"
+}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+## List all system requirements.
+
+This method returns an array with all requirements in the database. The data is returned in pages of length 20. If no
+page is passed, the system will assume the requested page is page 0, otherwise the desired page must be sent.
+
+	GET /catalogs/:catalog/modalities/:modality/blocks/:block/requirements
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| page			| [Number=0]			|  Requested page.							|
+
+### Success Response
+
+HTTP/1.1 200 OK
+
+```
+[{
+ "discipline": {
+   "code": "MC001",
+   "name": "Fundamentos de computação",
+   "credits": 6,
+   "department": "IC",
+   "description": "Fundamentos de computação",
+   "createdAt": "2014-07-01T12:22:25.058Z",
+   "updatedAt": "2014-07-01T12:22:25.058Z"
+ },
+ "suggestedSemester": 2,
+ "createdAt": "2014-07-01T12:22:25.058Z",
+ "updatedAt": "2014-07-01T12:22:25.058Z"
+}]
+
+```
+## Removes requirement.
+
+This method removes a requirement from the system. If no requirement with the requested code was found, a 404 error will be
+raised.
+
+	DELETE /catalogs/:catalog/modalities/:modality/blocks/:block/requirements/:requirement
+
+
+### Success Response
+
+HTTP/1.1 204 No Content
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 403 Forbidden
+
+```
+{}
+
+```
+## Updates requirement information.
+
+When updating a requirement the user must send the requirement suggestedSemester, discipline and mask. If a existing
+code which is not the original requirement code is sent to this method, a 409 error will be raised. And if no
+discipline or mask is sent, a 400 error will be raised. If no requirement with the requested code was found, a 404
+error will be raised.
+
+	PUT /catalogs/:catalog/modalities/:modality/blocks/:block/requirements/:requirement
+
+### Parameters
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| discipline			| String			|  Requirement discipline code.							|
+| mask			| String			|  Requirement discipline mask.							|
+| suggestedSemester			| Number			|  Requirement suggested semester.							|
+
+### Success Response
+
+HTTP/1.1 200 Ok
+
+```
+{}
+
+```
+### Error Response
+
+HTTP/1.1 404 Not Found
+
+```
+{}
+
+```
+HTTP/1.1 400 Bad Request
+
+```
+{
+ "code": "required"
 }
 
 ```

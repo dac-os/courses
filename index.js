@@ -38,6 +38,7 @@ app.use(require('./controllers/offering'));
 app.use(require('./controllers/catalog'));
 app.use(require('./controllers/modality'));
 app.use(require('./controllers/block'));
+app.use(require('./controllers/requirement'));
 app.use(function handleErrors(error, request, response, next) {
   'use strict';
 
