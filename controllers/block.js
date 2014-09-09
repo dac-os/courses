@@ -273,9 +273,11 @@ router.param('catalog', function findCatalog(request, response, next, id) {
 router.param('modality', function findModality(request, response, next, id) {
   'use strict';
 
-  var query;
+  var query, code;
+  code = id.split('-');
   query = Modality.findOne();
-  query.where('code').equals(id);
+  query.where('courseCode').equals(code[0]);
+  query.where('code').equals(code[1]);
   query.where('catalog').equals(request.catalog._id);
   query.populate('course');
   query.populate('catalog');
