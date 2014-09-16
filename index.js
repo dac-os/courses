@@ -65,7 +65,7 @@ app.use(function handleErrors(error, request, response, next) {
 app.get('/', function pingSuccess(request, response) {
   'use strict';
 
-  response.status(200).send('ola mundo');
+  response.status(200).send({});
 });
 
 app.listen(nconf.get('PORT'));
