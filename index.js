@@ -44,7 +44,7 @@ app.use(function handleErrors(error, request, response, next) {
 
   var errors, prop;
   if (error && error.cause && error.cause()) {
-    if (error.cause().code === 11000) {
+    if ([11000, 11001].lastIndexOf(error.cause().code) > -1) {
       return response.status(409).end();
     }
     if (error.cause().errors) {
