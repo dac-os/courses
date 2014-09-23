@@ -7,7 +7,8 @@
     "test": "NODE_ENV=test mocha test/ --require blanket -R mocha-spec-cov-alt",
     "predocs": "apidoc -i controllers/ -o docs/",
     "docs": "apidoc-markdown -p docs/ -o README.md",
-    "postdocs": "rm -R docs"
+    "postdocs": "rm -R docs",
+    "start": "node cluster.js"
   },
   "repository": {
     "type": "git",
