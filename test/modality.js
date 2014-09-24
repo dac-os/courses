@@ -54,6 +54,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.send({'code' : 'AA'});
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.expect(403);
       request.end(done);
     });
@@ -65,6 +66,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'userToken');
       request.send({'code' : 'AA'});
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.expect(403);
       request.end(done);
     });
@@ -76,6 +78,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.expect(404);
       request.end(done);
     });
@@ -86,6 +89,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -99,9 +103,24 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
+      request.send({'creditLimit' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('course').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without creditLimit', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/catalogs/2014/modalities');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'AA'});
+      request.send({'course' : '42'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('creditLimit').be.equal('required');
       });
       request.end(done);
     });
@@ -111,10 +130,53 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
+      request.send({'creditLimit' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
         response.body.should.have.property('course').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without code and creditLimit', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/catalogs/2014/modalities');
+      request.set('csrf-token', 'adminToken');
+      request.send({'course' : '42'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('creditLimit').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without course and creditLimit', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/catalogs/2014/modalities');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'AA'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('course').be.equal('required');
+        response.body.should.have.property('creditLimit').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without code, course and creditLimit', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/catalogs/2014/modalities');
+      request.set('csrf-token', 'adminToken');
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('course').be.equal('required');
+        response.body.should.have.property('creditLimit').be.equal('required');
       });
       request.end(done);
     });
@@ -126,6 +188,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.expect(201);
       request.end(done);
     });
@@ -140,6 +203,7 @@ describe('modality controller', function () {
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AA'});
         request.send({'course' : '42'});
+        request.send({'creditLimit' : 30});
         request.end(done);
       });
 
@@ -150,6 +214,7 @@ describe('modality controller', function () {
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AA'});
         request.send({'course' : '42'});
+        request.send({'creditLimit' : 30});
         request.expect(409);
         request.end(done);
       });
@@ -166,6 +231,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.end(done);
     });
 
@@ -217,6 +283,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.end(done);
     });
 
@@ -261,6 +328,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.end(done);
     });
 
@@ -270,6 +338,7 @@ describe('modality controller', function () {
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
+      request.send({'creditLimit' : 30});
       request.expect(403);
       request.end(done);
     });
@@ -281,6 +350,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'userToken');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
+      request.send({'creditLimit' : 30});
       request.expect(403);
       request.end(done);
     });
@@ -292,6 +362,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
+      request.send({'creditLimit' : 30});
       request.expect(404);
       request.end(done);
     });
@@ -303,6 +374,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
+      request.send({'creditLimit' : 30});
       request.expect(404);
       request.end(done);
     });
@@ -312,7 +384,8 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
-      request.send({'course' : '43'});
+      request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -325,10 +398,25 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
-      request.send({'code' : 'AB'});
+      request.send({'code' : 'AA'});
+      request.send({'creditLimit' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('course').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without creditLimit', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/catalogs/2014/modalities/42-AA');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'AA'});
+      request.send({'course' : '42'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('creditLimit').be.equal('required');
       });
       request.end(done);
     });
@@ -338,10 +426,53 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
+      request.send({'creditLimit' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
         response.body.should.have.property('course').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without code and creditLimit', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/catalogs/2014/modalities/42-AA');
+      request.set('csrf-token', 'adminToken');
+      request.send({'course' : '42'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('creditLimit').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without course and creditLimit', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/catalogs/2014/modalities/42-AA');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'AA'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('course').be.equal('required');
+        response.body.should.have.property('creditLimit').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without code, course and creditLimit', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/catalogs/2014/modalities/42-AA');
+      request.set('csrf-token', 'adminToken');
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('course').be.equal('required');
+        response.body.should.have.property('creditLimit').be.equal('required');
       });
       request.end(done);
     });
@@ -353,6 +484,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
       request.send({'course' : '43'});
+      request.send({'creditLimit' : 40});
       request.expect(200);
       request.end(done);
     });
@@ -365,6 +497,7 @@ describe('modality controller', function () {
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AA'});
         request.send({'course' : '42'});
+        request.send({'creditLimit' : 30});
         request.end(done);
       });
 
@@ -375,6 +508,7 @@ describe('modality controller', function () {
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AB'});
         request.send({'course' : '43'});
+        request.send({'creditLimit' : 30});
         request.expect(409);
         request.end(done);
       });
@@ -391,6 +525,7 @@ describe('modality controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
       request.send({'course' : '42'});
+      request.send({'creditLimit' : 30});
       request.end(done);
     });
 

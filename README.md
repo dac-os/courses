@@ -836,9 +836,9 @@ HTTP/1.1 409 Conflict
 
 ## Creates a new modality.
 
-When creating a new modality the user must send the modality code and course. The modality code is used for
-identifying and must be unique in the catalog. If a existing code is sent to this method, a 409 error will be raised.
-And if no code or course is sent, a 400 error will be raised.
+When creating a new modality the user must send the modality code, course and creditLimit. The modality code is used
+for identifying and must be unique in the catalog. If a existing code is sent to this method, a 409 error will be
+raised. And if no code, or course, or creditLimit is sent, a 400 error will be raised.
 
 	POST /catalogs/:catalog/modalities
 
@@ -848,6 +848,7 @@ And if no code or course is sent, a 400 error will be raised.
 |---------|-----------|--------------------------------------|
 | code			| String			|  Modality code.							|
 | course			| String			|  Modality course code.							|
+| creditLimit			| Number			|  Modality creditLimit.							|
 
 ### Success Response
 
@@ -864,7 +865,8 @@ HTTP/1.1 400 Bad Request
 ```
 {
  "code": "required",
- "course": "required"
+ "course": "required",
+ "creditLimit": "required"
 }
 
 ```
@@ -901,6 +903,7 @@ HTTP/1.1 200 OK
 ```
 {
  "code": "AA",
+   "code": "42",
  "course": {
    "code": "42",
    "name": "Ciencia da computação",
@@ -941,6 +944,7 @@ HTTP/1.1 200 OK
 ```
 [{
  "code": "AA",
+ "creditLimit": 30,
  "course": {
    "code": "42",
    "name": "Ciencia da computação",
@@ -1005,6 +1009,7 @@ error will be raised. If no modality with the requested code was found, a 404 er
 |---------|-----------|--------------------------------------|
 | code			| String			|  Modality code.							|
 | course			| String			|  Modality course code.							|
+| creditLimit			| Number			|  Modality creditLimit.							|
 
 ### Success Response
 
@@ -1027,7 +1032,8 @@ HTTP/1.1 400 Bad Request
 ```
 {
  "code": "required",
- "course": "required"
+ "course": "required",
+ "creditLimit": "required"
 }
 
 ```

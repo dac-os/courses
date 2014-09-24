@@ -54,6 +54,7 @@ describe('block controller', function () {
     request.set('csrf-token', 'adminToken');
     request.send({'code' : 'AA'});
     request.send({'course' : '42'});
+    request.send({'creditLimit' : 30});
     request.end(done);
   });
 
