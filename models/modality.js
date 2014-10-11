@@ -11,8 +11,12 @@ schema = new Schema({
     'type'     : String,
     'required' : true
   },
-  'courseCode' : {
+  'name'       : {
     'type'     : String,
+    'required' : true
+  },
+  'courseCode' : {
+    'type'     : Number,
     'required' : true
   },
   'course'     : {
@@ -41,8 +45,9 @@ schema = new Schema({
 });
 
 schema.index({
-  'code'    : 1,
-  'catalog' : 1
+  'code'          : 1,
+  'courseCode'    : 1,
+  'catalog'       : 1
 }, {
   'unique' : true
 });
@@ -50,6 +55,7 @@ schema.index({
 schema.plugin(jsonSelect, {
   '_id'        : 0,
   'code'       : 1,
+  'name'       : 1,
   'courseCode' : 0,
   'course'     : 1,
   'catalog'    : 0,

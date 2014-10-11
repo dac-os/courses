@@ -9,8 +9,7 @@ Schema = mongoose.Schema;
 schema = new Schema({
   'code'              : {
     'type'     : String,
-    'required' : true,
-    'unique'   : true
+    'required' : true
   },
   'block'             : {
     'type'     : Schema.ObjectId,
@@ -45,8 +44,6 @@ schema = new Schema({
 schema.index({
   'code'  : 1,
   'block' : 1
-}, {
-  'unique' : true
 });
 
 schema.plugin(jsonSelect, {

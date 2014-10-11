@@ -24,6 +24,14 @@ schema = new Schema({
     'type'     : String,
     'required' : true
   },
+  'class'       : {
+    'type'     : String,
+    'required' : true
+  },
+  'vacancy'     : {
+    'type'     : Number,
+    'required' : true
+  },
   'schedules'  : [
     {
       'weekday' : {
@@ -58,7 +66,9 @@ schema.index({
   'code'       : 1,
   'discipline' : 1,
   'year'       : 1,
-  'period'     : 1
+  'period'     : 1,
+  'class'      : 1,
+  'vacancy'    : 1
 }, {
   'unique' : true
 });
@@ -69,6 +79,8 @@ schema.plugin(jsonSelect, {
   'discipline' : 0,
   'year'       : 1,
   'period'     : 1,
+  'class'      : 1,
+  'vacancy'    : 1,
   'schedules'  : 1,
   'createdAt'  : 1,
   'updatedAt'  : 1
