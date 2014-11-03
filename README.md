@@ -836,9 +836,9 @@ HTTP/1.1 409 Conflict
 
 ## Creates a new modality.
 
-When creating a new modality the user must send the modality code, course and creditLimit. The modality code is used
-for identifying and must be unique in the catalog. If a existing code is sent to this method, a 409 error will be
-raised. And if no code, or course, or creditLimit is sent, a 400 error will be raised.
+When creating a new modality the user must send the modality code, name, course and creditLimit. The modality code
+is used for identifying and must be unique in the catalog. If a existing code is sent to this method, a 409 error
+will be raised. And if no code, or name or course is sent, a 400 error will be raised.
 
 	POST /catalogs/:catalog/modalities
 
@@ -847,6 +847,7 @@ raised. And if no code, or course, or creditLimit is sent, a 400 error will be r
 | Name    | Type      | Description                          |
 |---------|-----------|--------------------------------------|
 | code			| String			|  Modality code.							|
+| name			| String			|  Modality name.							|
 | course			| String			|  Modality course code.							|
 | creditLimit			| Number			|  Modality creditLimit.							|
 
@@ -865,7 +866,8 @@ HTTP/1.1 400 Bad Request
 ```
 {
  "code": "required",
- "course": "required",
+ "name": "required",
+ "course": "required"
  "creditLimit": "required"
 }
 
@@ -903,7 +905,7 @@ HTTP/1.1 200 OK
 ```
 {
  "code": "AA",
-   "code": "42",
+ "name": "Ciencia da computação",
  "course": {
    "code": "42",
    "name": "Ciencia da computação",
@@ -945,6 +947,7 @@ HTTP/1.1 200 OK
 [{
  "code": "AA",
  "creditLimit": 30,
+ "name": "Ciencia da computação",
  "course": {
    "code": "42",
    "name": "Ciencia da computação",
@@ -997,9 +1000,9 @@ HTTP/1.1 403 Forbidden
 ```
 ## Updates modality information.
 
-When updating a modality the user must send the modality code and course. If a existing code which is not the
-original modality code is sent to this method, a 409 error will be raised. And if no code or course is sent, a 400
-error will be raised. If no modality with the requested code was found, a 404 error will be raised.
+When updating a modality the user must send the modality code, name, course and creditLimit. If a existing code which
+is not the original modality code is sent to this method, a 409 error will be raised. And if no code, or name or
+course, or creditLimit is sent, a 400 error will be raised. If no modality with the requested code was found, a 404 error will be raised.
 
 	PUT /catalogs/:catalog/modalities/:modality
 
@@ -1008,6 +1011,7 @@ error will be raised. If no modality with the requested code was found, a 404 er
 | Name    | Type      | Description                          |
 |---------|-----------|--------------------------------------|
 | code			| String			|  Modality code.							|
+| name			| String			|  Modality name.							|
 | course			| String			|  Modality course code.							|
 | creditLimit			| Number			|  Modality creditLimit.							|
 
@@ -1032,8 +1036,9 @@ HTTP/1.1 400 Bad Request
 ```
 {
  "code": "required",
- "course": "required",
  "creditLimit": "required"
+ "name": "required",
+ "course": "required"
 }
 
 ```
@@ -1053,10 +1058,10 @@ HTTP/1.1 409 Conflict
 
 ## Creates a new offering.
 
-When creating a new offering the user must send the offering code, year, period and schedules. The offering code is
-used for identifying and must be unique in the year's period for each discipline. If a existing code is sent to this
-method, a 409 error will be raised. And if no code, or year or period is sent, a 400 error will be raised. The
-schedules vector contains the weekday, hour and room of each class of the offering
+When creating a new offering the user must send the offering code, year, period, vacancy, reservations and schedules.
+The offering code is used for identifying and must be unique in the year's period for each discipline. If a existing
+code is sent to this method, a 409 error will be raised. And if no code, or year, or vacancy or period is sent, a 400
+error will be raised. The schedules vector contains the weekday, hour and room of each class of the offering
 
 	POST /disciplines/:discipline/offerings
 
@@ -1067,6 +1072,8 @@ schedules vector contains the weekday, hour and room of each class of the offeri
 | code			| String			|  Offering code.							|
 | year			| Number			|  Offering year.							|
 | period			| String			|  Offering period.							|
+| reservations			| String []			|  Offering reservations.							|
+| vacancy			| Number			|  Offering vacancy.							|
 
 ### Success Response
 
@@ -1084,7 +1091,8 @@ HTTP/1.1 400 Bad Request
 {
  "code": "required",
  "year": "required",
- "period": "required"
+ "period": "required",
+ "vacancy": required
 }
 
 ```
@@ -1117,6 +1125,7 @@ HTTP/1.1 200 OK
  "code": "A",
  "year": 2014,
  "period": "1",
+ "vacancy": 30,
  "schedules": [
    "weekday" : 1,
    "hour" : 19,
@@ -1157,6 +1166,7 @@ HTTP/1.1 200 OK
  "code": "A",
  "year": 2014,
  "period": "1",
+ "vacancy": 30,
  "schedules": [
    "weekday" : 1,
    "hour" : 19,
@@ -1213,6 +1223,8 @@ raised.
 | code			| String			|  Offering code.							|
 | year			| Number			|  Offering year.							|
 | period			| String			|  Offering period.							|
+| reservations			| String []			|  Offering reservations.							|
+| vacancy			| Number			|  Offering vacancy.							|
 
 ### Success Response
 
@@ -1236,7 +1248,8 @@ HTTP/1.1 400 Bad Request
 {
  "code": "required",
  "year": "required",
- "period": "required"
+ "period": "required",
+ "vacancy": required
 }
 
 ```
