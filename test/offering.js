@@ -35,6 +35,7 @@ describe('offering controller', function () {
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
       ]});
@@ -50,6 +51,7 @@ describe('offering controller', function () {
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
       ]});
@@ -65,6 +67,7 @@ describe('offering controller', function () {
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
       ]});
@@ -79,6 +82,7 @@ describe('offering controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -93,6 +97,7 @@ describe('offering controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'A'});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('year').be.equal('required');
@@ -107,9 +112,82 @@ describe('offering controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('period').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines/MC102/offerings');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'A'});
+      request.send({'year' : 2014});
+      request.send({'period' : '1'});
+      request.send({'schedules' : [
+        {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy and code', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines/MC102/offerings');
+      request.set('csrf-token', 'adminToken');
+      request.send({'year' : 2014});
+      request.send({'period' : '1'});
+      request.send({'schedules' : [
+        {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('vacancy').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy and year', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines/MC102/offerings');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'A'});
+      request.send({'period' : '1'});
+      request.send({'schedules' : [
+        {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('year').be.equal('required');
+        response.body.should.have.property('vacancy').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy and period', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines/MC102/offerings');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'A'});
+      request.send({'year' : 2014});
+      request.send({'schedules' : [
+        {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('period').be.equal('required');
+        response.body.should.have.property('vacancy').be.equal('required');
       });
       request.end(done);
     });
@@ -120,6 +198,7 @@ describe('offering controller', function () {
       request = request.post('/disciplines/MC102/offerings');
       request.set('csrf-token', 'adminToken');
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -134,6 +213,7 @@ describe('offering controller', function () {
       request = request.post('/disciplines/MC102/offerings');
       request.set('csrf-token', 'adminToken');
       request.send({'year' : 2014});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -148,6 +228,7 @@ describe('offering controller', function () {
       request = request.post('/disciplines/MC102/offerings');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'A'});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('year').be.equal('required');
@@ -161,11 +242,84 @@ describe('offering controller', function () {
       request = supertest(app);
       request = request.post('/disciplines/MC102/offerings');
       request.set('csrf-token', 'adminToken');
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
         response.body.should.have.property('year').be.equal('required');
         response.body.should.have.property('period').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy, year and period', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines/MC102/offerings');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'A'});
+      request.send({'schedules' : [
+        {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('year').be.equal('required');
+        response.body.should.have.property('period').be.equal('required');
+        response.body.should.have.property('vacancy').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy, code and period', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines/MC102/offerings');
+      request.set('csrf-token', 'adminToken');
+      request.send({'year' : 2014});
+      request.send({'schedules' : [
+        {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('period').be.equal('required');
+        response.body.should.have.property('vacancy').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy, code and year', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines/MC102/offerings');
+      request.set('csrf-token', 'adminToken');
+      request.send({'period' : '1'});
+      request.send({'schedules' : [
+        {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('year').be.equal('required');
+        response.body.should.have.property('vacancy').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy, code, year and period', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/disciplines/MC102/offerings');
+      request.set('csrf-token', 'adminToken');
+      request.send({'schedules' : [
+        {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('year').be.equal('required');
+        response.body.should.have.property('period').be.equal('required');
+        response.body.should.have.property('vacancy').be.equal('required');
       });
       request.end(done);
     });
@@ -178,6 +332,7 @@ describe('offering controller', function () {
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
       ]});
@@ -196,6 +351,7 @@ describe('offering controller', function () {
         request.send({'code' : 'A'});
         request.send({'year' : 2014});
         request.send({'period' : '1'});
+        request.send({'vacancy' : 30});
         request.send({'schedules' : [
           {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
         ]});
@@ -210,6 +366,7 @@ describe('offering controller', function () {
         request.send({'code' : 'A'});
         request.send({'year' : 2014});
         request.send({'period' : '1'});
+        request.send({'vacancy' : 30});
         request.send({'schedules' : [
           {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
         ]});
@@ -230,6 +387,7 @@ describe('offering controller', function () {
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
       ]});
@@ -285,6 +443,7 @@ describe('offering controller', function () {
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
       ]});
@@ -332,6 +491,7 @@ describe('offering controller', function () {
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
       ]});
@@ -345,6 +505,7 @@ describe('offering controller', function () {
       request.send({'code' : 'B'});
       request.send({'year' : 2013});
       request.send({'period' : '2'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
       ]});
@@ -360,6 +521,7 @@ describe('offering controller', function () {
       request.send({'code' : 'B'});
       request.send({'year' : 2013});
       request.send({'period' : '2'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
       ]});
@@ -375,6 +537,7 @@ describe('offering controller', function () {
       request.send({'code' : 'B'});
       request.send({'year' : 2013});
       request.send({'period' : '2'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
       ]});
@@ -390,6 +553,7 @@ describe('offering controller', function () {
       request.send({'code' : 'B'});
       request.send({'year' : 2013});
       request.send({'period' : '2'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
       ]});
@@ -404,6 +568,7 @@ describe('offering controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'year' : 2013});
       request.send({'period' : '2'});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -418,6 +583,7 @@ describe('offering controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'B'});
       request.send({'period' : '2'});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('year').be.equal('required');
@@ -432,8 +598,81 @@ describe('offering controller', function () {
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'B'});
       request.send({'year' : 2013});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
+        response.body.should.have.property('period').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/disciplines/MC102/offerings/2014-1-A');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'B'});
+      request.send({'year' : 2013});
+      request.send({'period' : '2'});
+      request.send({'schedules' : [
+        {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy and code', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/disciplines/MC102/offerings/2014-1-A');
+      request.set('csrf-token', 'adminToken');
+      request.send({'year' : 2013});
+      request.send({'period' : '2'});
+      request.send({'schedules' : [
+        {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
+        response.body.should.have.property('code').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy and year', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/disciplines/MC102/offerings/2014-1-A');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'B'});
+      request.send({'period' : '2'});
+      request.send({'schedules' : [
+        {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
+        response.body.should.have.property('year').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy and period', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/disciplines/MC102/offerings/2014-1-A');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'B'});
+      request.send({'year' : 2013});
+      request.send({'schedules' : [
+        {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
         response.body.should.have.property('period').be.equal('required');
       });
       request.end(done);
@@ -445,6 +684,7 @@ describe('offering controller', function () {
       request = request.put('/disciplines/MC102/offerings/2014-1-A');
       request.set('csrf-token', 'adminToken');
       request.send({'period' : '2'});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -459,6 +699,7 @@ describe('offering controller', function () {
       request = request.put('/disciplines/MC102/offerings/2014-1-A');
       request.set('csrf-token', 'adminToken');
       request.send({'year' : 2013});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
@@ -473,6 +714,7 @@ describe('offering controller', function () {
       request = request.put('/disciplines/MC102/offerings/2014-1-A');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'B'});
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('year').be.equal('required');
@@ -486,8 +728,81 @@ describe('offering controller', function () {
       request = supertest(app);
       request = request.put('/disciplines/MC102/offerings/2014-1-A');
       request.set('csrf-token', 'adminToken');
+      request.send({'vacancy' : 30});
       request.expect(400);
       request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('year').be.equal('required');
+        response.body.should.have.property('period').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy, year and period', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/disciplines/MC102/offerings/2014-1-A');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'B'});
+      request.send({'schedules' : [
+        {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
+        response.body.should.have.property('year').be.equal('required');
+        response.body.should.have.property('period').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy, code and period', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/disciplines/MC102/offerings/2014-1-A');
+      request.set('csrf-token', 'adminToken');
+      request.send({'year' : 2013});
+      request.send({'schedules' : [
+        {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('period').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy, code and year', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/disciplines/MC102/offerings/2014-1-A');
+      request.set('csrf-token', 'adminToken');
+      request.send({'period' : '2'});
+      request.send({'schedules' : [
+        {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('year').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without vacancy, code, year and period', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/disciplines/MC102/offerings/2014-1-A');
+      request.set('csrf-token', 'adminToken');
+      request.send({'schedules' : [
+        {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
+      ]});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('vacancy').be.equal('required');
         response.body.should.have.property('code').be.equal('required');
         response.body.should.have.property('year').be.equal('required');
         response.body.should.have.property('period').be.equal('required');
@@ -503,6 +818,7 @@ describe('offering controller', function () {
       request.send({'code' : 'B'});
       request.send({'year' : 2013});
       request.send({'period' : '2'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
       ]});
@@ -519,6 +835,7 @@ describe('offering controller', function () {
         request.send({'code' : 'A'});
         request.send({'year' : 2014});
         request.send({'period' : '1'});
+        request.send({'vacancy' : 30});
         request.send({'schedules' : [
           {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
         ]});
@@ -533,6 +850,7 @@ describe('offering controller', function () {
         request.send({'code' : 'B'});
         request.send({'year' : 2013});
         request.send({'period' : '2'});
+        request.send({'vacancy' : 30});
         request.send({'schedules' : [
           {'weekday' : 2, 'hour' : 17, 'room' : 'B'}
         ]});
@@ -553,6 +871,7 @@ describe('offering controller', function () {
       request.send({'code' : 'A'});
       request.send({'year' : 2014});
       request.send({'period' : '1'});
+      request.send({'vacancy' : 30});
       request.send({'schedules' : [
         {'weekday' : 1, 'hour' : 19, 'room' : 'A'}
       ]});

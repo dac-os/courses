@@ -44,6 +44,7 @@ describe('requirement controller', function () {
     request = request.post('/catalogs/2014/modalities');
     request.set('csrf-token', 'adminToken');
     request.send({'code' : 'AA'});
+    request.send({'name' : 'Ciencia da computação'});
     request.send({'course' : '42'});
     request.send({'creditLimit' : 30});
     request.end(done);
@@ -107,7 +108,7 @@ describe('requirement controller', function () {
     it('should raise error with invalid modality', function (done) {
       var request;
       request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/invalid/blocks/visao/requirements');
+      request = request.post('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements');
       request.set('csrf-token', 'adminToken');
       request.send({'discipline' : 'MC001'});
       request.expect(404);
@@ -191,7 +192,7 @@ describe('requirement controller', function () {
     it('should raise error with invalid modality', function (done) {
       var request;
       request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/invalid/blocks/visao/requirements');
+      request = request.get('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements');
       request.expect(404);
       request.end(done);
     });
@@ -263,7 +264,7 @@ describe('requirement controller', function () {
     it('should raise error with invalid modality code', function (done) {
       var request;
       request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/invalid/blocks/visao/requirements/MC001');
+      request = request.get('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
       request.expect(404);
       request.end(done);
     });
@@ -351,7 +352,7 @@ describe('requirement controller', function () {
     it('should raise error with invalid modality code', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/invalid/blocks/visao/requirements/MC001');
+      request = request.put('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
       request.set('csrf-token', 'adminToken');
       request.send({'mask' : 'MC---'});
       request.expect(404);
@@ -460,7 +461,7 @@ describe('requirement controller', function () {
     it('should raise error with invalid modality code', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/invalid/blocks/visao/requirements/MC001');
+      request = request.del('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
       request.set('csrf-token', 'adminToken');
       request.expect(404);
       request.end(done);

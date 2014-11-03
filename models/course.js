@@ -8,7 +8,7 @@ Schema = mongoose.Schema;
 
 schema = new Schema({
   'code'      : {
-    'type'     : String,
+    'type'     : Number,
     'required' : true,
     'unique'   : true
   },

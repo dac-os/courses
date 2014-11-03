@@ -53,6 +53,7 @@ describe('block controller', function () {
     request = request.post('/catalogs/2014/modalities');
     request.set('csrf-token', 'adminToken');
     request.send({'code' : 'AA'});
+    request.send({'name' : 'Ciencia da computação'});
     request.send({'course' : '42'});
     request.send({'creditLimit' : 30});
     request.end(done);
@@ -96,7 +97,7 @@ describe('block controller', function () {
     it('should raise error with invalid modality code', function (done) {
       var request;
       request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/invalid/blocks');
+      request = request.post('/catalogs/2014/modalities/100-invalid/blocks');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'visao'});
       request.send({'type' : 'required'});
@@ -204,7 +205,7 @@ describe('block controller', function () {
     it('should raise error with invalid modality code', function (done) {
       var request;
       request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/invalid/blocks');
+      request = request.get('/catalogs/2014/modalities/100-invalid/blocks');
       request.expect(404);
       request.end(done);
     });
@@ -261,7 +262,7 @@ describe('block controller', function () {
     it('should raise error with invalid modality code', function (done) {
       var request;
       request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/invalid/blocks/visao');
+      request = request.get('/catalogs/2014/modalities/100-invalid/blocks/visao');
       request.expect(404);
       request.end(done);
     });
@@ -333,7 +334,7 @@ describe('block controller', function () {
     it('should raise error with invalid modality code', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/invalid/blocks/visao');
+      request = request.put('/catalogs/2014/modalities/100-invalid/blocks/visao');
       request.set('csrf-token', 'adminToken');
       request.expect(404);
       request.end(done);
@@ -436,7 +437,7 @@ describe('block controller', function () {
     it('should raise error with invalid modality code', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/invalid/blocks/visao');
+      request = request.del('/catalogs/2014/modalities/100-invalid/blocks/visao');
       request.set('csrf-token', 'adminToken');
       request.expect(404);
       request.end(done);

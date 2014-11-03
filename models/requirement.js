@@ -9,8 +9,7 @@ Schema = mongoose.Schema;
 schema = new Schema({
   'code'              : {
     'type'     : String,
-    'required' : true,
-    'unique'   : true
+    'required' : true
   },
   'block'             : {
     'type'     : Schema.ObjectId,

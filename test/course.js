@@ -231,7 +231,7 @@ describe('course controller', function () {
     it('should raise error with invalid code', function (done) {
       var request;
       request = supertest(app);
-      request = request.get('/courses/invalid');
+      request = request.get('/courses/100');
       request.expect(404);
       request.end(done);
     });
@@ -242,7 +242,7 @@ describe('course controller', function () {
       request = request.get('/courses/42');
       request.expect(200);
       request.expect(function (response) {
-        response.body.should.have.property('code').be.equal('42');
+        response.body.should.have.property('code').be.equal(42);
         response.body.should.have.property('name').be.equal('Ciencia da computação');
         response.body.should.have.property('level').be.equal('GRAD');
       });
@@ -290,7 +290,7 @@ describe('course controller', function () {
     it('should raise error with invalid code', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/courses/invalid');
+      request = request.put('/courses/100');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : '43'});
       request.send({'name' : 'Ciencia da computação 2'});
@@ -371,7 +371,7 @@ describe('course controller', function () {
     it('should raise error with invalid code', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/courses/invalid');
+      request = request.del('/courses/100');
       request.set('csrf-token', 'adminToken');
       request.expect(404);
       request.end(done);
