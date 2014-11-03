@@ -15,14 +15,16 @@ Discipline = require('../models/discipline');
  * @apiGroup offering
  * @apiPermission changeOffering
  * @apiDescription
- * When creating a new offering the user must send the offering code, year, period and schedules. The offering code is
- * used for identifying and must be unique in the year's period for each discipline. If a existing code is sent to this
- * method, a 409 error will be raised. And if no code, or year or period is sent, a 400 error will be raised. The
- * schedules vector contains the weekday, hour and room of each class of the offering
+ * When creating a new offering the user must send the offering code, year, period, vacancy, reservations and schedules.
+ * The offering code is used for identifying and must be unique in the year's period for each discipline. If a existing
+ * code is sent to this method, a 409 error will be raised. And if no code, or year, or vacancy or period is sent, a 400
+ * error will be raised. The schedules vector contains the weekday, hour and room of each class of the offering
  *
  * @apiParam {String} code Offering code.
  * @apiParam {Number} year Offering year.
  * @apiParam {String} period Offering period.
+ * @apiParam {String []} reservations Offering reservations.
+ * @apiParam {Number} vacancy Offering vacancy.
  * @apiParam (schedules) {String} weekday Offering scheduled weekday.
  * @apiParam (schedules) {String} hour Offering scheduled hour.
  * @apiParam (schedules) {String} room Offering scheduled room.
@@ -32,7 +34,8 @@ Discipline = require('../models/discipline');
  * {
  *   "code": "required",
  *   "year": "required",
- *   "period": "required"
+ *   "period": "required",
+ *   "vacancy": required
  * }
  *
  * @apiErrorExample
@@ -55,11 +58,13 @@ router
 
   var offering;
   offering = new Offering({
-    'code'       : slug(request.param('code', '')),
-    'year'       : request.param('year'),
-    'period'     : request.param('period'),
-    'schedules'  : request.param('schedules'),
-    'discipline' : request.discipline
+    'code'         : slug(request.param('code', '')),
+    'year'         : request.param('year'),
+    'period'       : request.param('period'),
+    'reservations' : request.param('reservations'),
+    'vacancy'      : request.param('vacancy'),
+    'schedules'    : request.param('schedules'),
+    'discipline'   : request.discipline
   });
   return offering.save(function createdOffering(error) {
     if (error) {
@@ -85,6 +90,8 @@ router
  * @apiSuccess (offering) {String} code Offering code.
  * @apiSuccess (offering) {Number} year Offering year.
  * @apiSuccess (offering) {String} period Offering period.
+ * @apiSuccess (offering) {String []} reservations Offering reservations.
+ * @apiSuccess (offering) {Number} vacancy Offering vacancy.
  * @apiSuccess (offering) {Date} createdAt Offering creation date.
  * @apiSuccess (offering) {Date} updatedAt Offering last update date.
  * @apiSuccess (schedules) {String} weekday Offering scheduled weekday.
@@ -97,6 +104,7 @@ router
  *   "code": "A",
  *   "year": 2014,
  *   "period": "1",
+ *   "vacancy": 30,
  *   "schedules": [
  *     "weekday" : 1,
  *     "hour" : 19,
@@ -141,6 +149,8 @@ router
  * @apiSuccess {String} code Offering code.
  * @apiSuccess {Number} year Offering year.
  * @apiSuccess {String} period Offering period.
+ * @apiSuccess {String []} reservations Offering reservations.
+ * @apiSuccess {Number} vacancy Offering vacancy.
  * @apiSuccess {Date} createdAt Offering creation date.
  * @apiSuccess {Date} updatedAt Offering last update date.
  * @apiSuccess (schedules) {String} weekday Offering scheduled weekday.
@@ -157,6 +167,7 @@ router
  *   "code": "A",
  *   "year": 2014,
  *   "period": "1",
+ *   "vacancy": 30,
  *   "schedules": [
  *     "weekday" : 1,
  *     "hour" : 19,
@@ -191,6 +202,8 @@ router
  * @apiParam {String} code Offering code.
  * @apiParam {Number} year Offering year.
  * @apiParam {String} period Offering period.
+ * @apiParam {String []} reservations Offering reservations.
+ * @apiParam {Number} vacancy Offering vacancy.
  * @apiParam (schedules) {String} weekday Offering scheduled weekday.
  * @apiParam (schedules) {String} hour Offering scheduled hour.
  * @apiParam (schedules) {String} room Offering scheduled room.
@@ -204,7 +217,8 @@ router
  * {
  *   "code": "required",
  *   "year": "required",
- *   "period": "required"
+ *   "period": "required",
+ *   "vacancy": required
  * }
  *
  * @apiErrorExample
@@ -230,7 +244,9 @@ router
   offering.code = slug(request.param('code', ''));
   offering.year = request.param('year');
   offering.period = request.param('period');
+  offering.reservations = request.param('reservations');
   offering.schedules = request.param('schedules');
+  offering.vacancy = request.param('vacancy');
   return offering.save(function updatedOffering(error) {
     if (error) {
       error = new VError(error, 'error updating offering: ""', request.params.offering);

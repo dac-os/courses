@@ -81,6 +81,7 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.post('/catalogs/2014/modalities');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '42'});
       request.expect(403);
       request.end(done);
@@ -92,6 +93,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'userToken');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '42'});
       request.expect(403);
       request.end(done);
@@ -103,6 +105,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2012/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '42'});
       request.expect(404);
       request.end(done);
@@ -114,9 +117,24 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'course' : '42'});
+      request.send({'name' : 'computação'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without name', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/catalogs/2014/modalities');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'AA'});
+      request.send({'course' : '42'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('name').be.equal('required');
       });
       request.end(done);
     });
@@ -127,6 +145,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('course').be.equal('required');
@@ -139,9 +158,52 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
+      request.send({'name' : 'computação'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('course').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without code and name', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/catalogs/2014/modalities');
+      request.set('csrf-token', 'adminToken');
+      request.send({'course' : '42'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('name').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without name and course', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/catalogs/2014/modalities');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'AA'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('name').be.equal('required');
+        response.body.should.have.property('course').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without code, name and course', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.post('/catalogs/2014/modalities');
+      request.set('csrf-token', 'adminToken');
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('name').be.equal('required');
         response.body.should.have.property('course').be.equal('required');
       });
       request.end(done);
@@ -153,6 +215,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '42'});
       request.expect(201);
       request.end(done);
@@ -167,6 +230,7 @@ describe('modality controller', function () {
         request = request.post('/catalogs/2014/modalities');
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AA'});
+        request.send({'name' : 'computação'});
         request.send({'course' : '42'});
         request.end(done);
       });
@@ -177,6 +241,7 @@ describe('modality controller', function () {
         request = request.post('/catalogs/2014/modalities');
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AA'});
+        request.send({'name' : 'computação'});
         request.send({'course' : '42'});
         request.expect(409);
         request.end(done);
@@ -193,6 +258,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '42'});
       request.end(done);
     });
@@ -244,6 +310,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '42'});
       request.end(done);
     });
@@ -259,7 +326,7 @@ describe('modality controller', function () {
     it('should raise error with invalid code', function (done) {
       var request;
       request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/invalid');
+      request = request.get('/catalogs/2014/modalities/100-invalid');
       request.expect(404);
       request.end(done);
     });
@@ -271,7 +338,7 @@ describe('modality controller', function () {
       request.expect(200);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('AA');
-        response.body.should.have.property('course').with.property('code').be.equal('42');
+        response.body.should.have.property('course').with.property('code').be.equal(42);
         response.body.should.have.property('course').with.property('name').be.equal('Ciencia da computação');
         response.body.should.have.property('course').with.property('level').be.equal('GRAD');
       });
@@ -288,6 +355,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '42'});
       request.end(done);
     });
@@ -297,6 +365,7 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.send({'code' : 'AB'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '43'});
       request.expect(403);
       request.end(done);
@@ -308,6 +377,7 @@ describe('modality controller', function () {
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'userToken');
       request.send({'code' : 'AB'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '43'});
       request.expect(403);
       request.end(done);
@@ -319,6 +389,7 @@ describe('modality controller', function () {
       request = request.put('/catalogs/2012/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '43'});
       request.expect(404);
       request.end(done);
@@ -327,9 +398,10 @@ describe('modality controller', function () {
     it('should raise error with invalid code', function (done) {
       var request;
       request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/invalid');
+      request = request.put('/catalogs/2014/modalities/100-invalid');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '43'});
       request.expect(404);
       request.end(done);
@@ -340,10 +412,25 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
+      request.send({'name' : 'computação'});
       request.send({'course' : '43'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without name', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/catalogs/2014/modalities/42-AA');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'AB'});
+      request.send({'course' : '43'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('name').be.equal('required');
       });
       request.end(done);
     });
@@ -354,6 +441,7 @@ describe('modality controller', function () {
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
+      request.send({'name' : 'computação'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('course').be.equal('required');
@@ -366,9 +454,52 @@ describe('modality controller', function () {
       request = supertest(app);
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
+      request.send({'name' : 'computação'});
       request.expect(400);
       request.expect(function (response) {
         response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('course').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without code and name', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/catalogs/2014/modalities/42-AA');
+      request.set('csrf-token', 'adminToken');
+      request.send({'course' : '43'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('name').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without name and course', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/catalogs/2014/modalities/42-AA');
+      request.set('csrf-token', 'adminToken');
+      request.send({'code' : 'AB'});
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('name').be.equal('required');
+        response.body.should.have.property('course').be.equal('required');
+      });
+      request.end(done);
+    });
+
+    it('should raise error without code, name and course', function (done) {
+      var request;
+      request = supertest(app);
+      request = request.put('/catalogs/2014/modalities/42-AA');
+      request.set('csrf-token', 'adminToken');
+      request.expect(400);
+      request.expect(function (response) {
+        response.body.should.have.property('code').be.equal('required');
+        response.body.should.have.property('name').be.equal('required');
         response.body.should.have.property('course').be.equal('required');
       });
       request.end(done);
@@ -380,6 +511,7 @@ describe('modality controller', function () {
       request = request.put('/catalogs/2014/modalities/42-AA');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AB'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '43'});
       request.expect(200);
       request.end(done);
@@ -392,6 +524,7 @@ describe('modality controller', function () {
         request = request.post('/catalogs/2014/modalities');
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AA'});
+        request.send({'name' : 'computação'});
         request.send({'course' : '42'});
         request.end(done);
       });
@@ -402,6 +535,7 @@ describe('modality controller', function () {
         request = request.put('/catalogs/2014/modalities/42-AA');
         request.set('csrf-token', 'adminToken');
         request.send({'code' : 'AB'});
+        request.send({'name' : 'computação'});
         request.send({'course' : '43'});
         request.expect(409);
         request.end(done);
@@ -418,6 +552,7 @@ describe('modality controller', function () {
       request = request.post('/catalogs/2014/modalities');
       request.set('csrf-token', 'adminToken');
       request.send({'code' : 'AA'});
+      request.send({'name' : 'computação'});
       request.send({'course' : '42'});
       request.end(done);
     });
@@ -451,7 +586,7 @@ describe('modality controller', function () {
     it('should raise error with invalid code', function (done) {
       var request;
       request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/invalid');
+      request = request.del('/catalogs/2014/modalities/100-invalid');
       request.set('csrf-token', 'adminToken');
       request.expect(404);
       request.end(done);

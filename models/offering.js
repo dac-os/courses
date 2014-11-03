@@ -7,32 +7,33 @@ nconf = require('nconf');
 Schema = mongoose.Schema;
 
 schema = new Schema({
-  'code'       : {
+  'code'         : {
     'type'     : String,
     'required' : true
   },
-  'discipline' : {
+  'discipline'   : {
     'type'     : Schema.ObjectId,
     'ref'      : 'Discipline',
     'required' : true
   },
-  'year'       : {
+  'year'         : {
     'type'     : Number,
     'required' : true
   },
-  'period'     : {
+  'period'       : {
     'type'     : String,
     'required' : true
   },
-  'class'       : {
-    'type'     : String,
-    'required' : true
-  },
-  'vacancy'     : {
+  'reservations' : [
+    {
+      'type' : String
+    }
+  ],
+  'vacancy'      : {
     'type'     : Number,
     'required' : true
   },
-  'schedules'  : [
+  'schedules'    : [
     {
       'weekday' : {
         'type'     : Number,
@@ -47,11 +48,11 @@ schema = new Schema({
       }
     }
   ],
-  'createdAt'  : {
+  'createdAt'    : {
     'type'    : Date,
     'default' : Date.now
   },
-  'updatedAt'  : {
+  'updatedAt'    : {
     'type' : Date
   }
 }, {
@@ -74,16 +75,16 @@ schema.index({
 });
 
 schema.plugin(jsonSelect, {
-  '_id'        : 0,
-  'code'       : 1,
-  'discipline' : 0,
-  'year'       : 1,
-  'period'     : 1,
-  'class'      : 1,
-  'vacancy'    : 1,
-  'schedules'  : 1,
-  'createdAt'  : 1,
-  'updatedAt'  : 1
+  '_id'          : 0,
+  'code'         : 1,
+  'discipline'   : 0,
+  'year'         : 1,
+  'period'       : 1,
+  'reservations' : 1,
+  'vacancy'      : 1,
+  'schedules'    : 1,
+  'createdAt'    : 1,
+  'updatedAt'    : 1
 });
 
 schema.pre('save', function setOfferingUpdatedAt(next) {

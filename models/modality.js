@@ -45,9 +45,9 @@ schema = new Schema({
 });
 
 schema.index({
-  'code'          : 1,
-  'courseCode'    : 1,
-  'catalog'       : 1
+  'code'       : 1,
+  'courseCode' : 1,
+  'catalog'    : 1
 }, {
   'unique' : true
 });

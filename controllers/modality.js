@@ -36,17 +36,19 @@ router.use(function (request, response, next) {
  * @apiGroup modality
  * @apiPermission changeModality
  * @apiDescription
- * When creating a new modality the user must send the modality code and course. The modality code is used for
+ * When creating a new modality the user must send the modality code, name and course. The modality code is used for
  * identifying and must be unique in the catalog. If a existing code is sent to this method, a 409 error will be raised.
- * And if no code or course is sent, a 400 error will be raised.
+ * And if no code, or name or course is sent, a 400 error will be raised.
  *
  * @apiParam {String} code Modality code.
+ * @apiParam {String} name Modality name.
  * @apiParam {String} course Modality course code.
  *
  * @apiErrorExample
  * HTTP/1.1 400 Bad Request
  * {
  *   "code": "required",
+ *   "name": "required",
  *   "course": "required"
  * }
  *
@@ -75,6 +77,7 @@ router
   var modality;
   modality = new Modality({
     'code'       : slug(request.param('code', '')),
+    'name'       : request.param('name'),
     'courseCode' : request.course ? request.course.code : null,
     'course'     : request.course,
     'catalog'    : request.catalog
@@ -101,6 +104,7 @@ router
  * @apiParam {[Number=0]} page Requested page.
  *
  * @apiSuccess (modality) {String} code Modality code.
+ * @apiSuccess (modality) {String} name Modality name.
  * @apiSuccess (modality) {Date} createdAt Modality creation date.
  * @apiSuccess (modality) {Date} updatedAt Modality last update date.
  * @apiSuccess (course) {String} code Course code.
@@ -117,6 +121,7 @@ router
  * HTTP/1.1 200 OK
  * [{
  *   "code": "AA",
+ *   "name": "Ciencia da computação",
  *   "course": {
  *     "code": "42",
  *     "name": "Ciencia da computação",
@@ -162,6 +167,7 @@ router
  * modality. If no modality with the requested code was found, a 404 error will be raised.
  *
  * @apiSuccess {String} code Modality code.
+ * @apiSuccess (modality) {String} name Modality name.
  * @apiSuccess {Date} createdAt Modality creation date.
  * @apiSuccess {Date} updatedAt Modality last update date.
  * @apiSuccess (course) {String} code Course code.
@@ -178,6 +184,7 @@ router
  * HTTP/1.1 200 OK
  * {
  *   "code": "AA",
+ *   "name": "Ciencia da computação",
  *   "course": {
  *     "code": "42",
  *     "name": "Ciencia da computação",
@@ -206,11 +213,12 @@ router
  * @apiGroup modality
  * @apiPermission changeModality
  * @apiDescription
- * When updating a modality the user must send the modality code and course. If a existing code which is not the
- * original modality code is sent to this method, a 409 error will be raised. And if no code or course is sent, a 400
- * error will be raised. If no modality with the requested code was found, a 404 error will be raised.
+ * When updating a modality the user must send the modality code, name and course. If a existing code which is not the
+ * original modality code is sent to this method, a 409 error will be raised. And if no code, or name or course is sent,
+ * a 400 error will be raised. If no modality with the requested code was found, a 404 error will be raised.
  *
  * @apiParam {String} code Modality code.
+ * @apiParam {String} name Modality name.
  * @apiParam {String} course Modality course code.
  *
  * @apiErrorExample
@@ -221,6 +229,7 @@ router
  * HTTP/1.1 400 Bad Request
  * {
  *   "code": "required",
+ *   "name": "required",
  *   "course": "required"
  * }
  *
@@ -245,6 +254,7 @@ router
   var modality;
   modality = request.modality;
   modality.code = slug(request.param('code', ''));
+  modality.name = request.param('name');
   modality.course = request.course;
   modality.courseCode = request.course ? request.course.code : null;
   return modality.save(function updatedModality(error) {

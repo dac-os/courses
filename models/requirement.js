@@ -44,6 +44,8 @@ schema = new Schema({
 schema.index({
   'code'  : 1,
   'block' : 1
+}, {
+  'unique' : true
 });
 
 schema.plugin(jsonSelect, {
