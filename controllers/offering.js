@@ -327,7 +327,7 @@ router.param('offering', function findOffering(request, response, next, id) {
   query.populate('discipline');
   query.exec(function foundOffering(error, offering) {
     if (error) {
-      error = new VError(error, 'error finding offering: ""', offering);
+      error = new VError(error, 'error finding offering: "%s"', offering);
       return next(error);
     }
     if (!offering) {
