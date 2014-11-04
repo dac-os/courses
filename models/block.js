@@ -1,9 +1,10 @@
-var VError, mongoose, jsonSelect, nconf, Schema, schema;
+var VError, mongoose, jsonSelect, nconf, Schema, async, schema;
 
 VError = require('verror');
 mongoose = require('mongoose');
 jsonSelect = require('mongoose-json-select');
 nconf = require('nconf');
+async = require('async');
 Schema = mongoose.Schema;
 
 schema = new Schema({
@@ -60,6 +61,22 @@ schema.pre('save', function setBlockUpdatedAt(next) {
 
   this.updatedAt = new Date();
   next();
+});
+
+schema.pre('remove', function deleteCascadeRequirements(next) {
+  'use strict';
+
+  async.waterfall([function (next) {
+    var Requirement, query;
+    Requirement = require('./requirement');
+    query = Requirement.find();
+    query.where('block').equals(this._id);
+    query.exec(next);
+  }.bind(this), function (requirements, next) {
+    async.each(requirements, function (requirement, next) {
+      requirement.remove(next);
+    }, next);
+  }], next);
 });
 
 module.exports = mongoose.model('Block', schema);

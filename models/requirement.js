@@ -1,13 +1,14 @@
-var VError, mongoose, jsonSelect, nconf, Schema, schema;
+var VError, mongoose, jsonSelect, nconf, Schema, async, schema;
 
 VError = require('verror');
 mongoose = require('mongoose');
 jsonSelect = require('mongoose-json-select');
 nconf = require('nconf');
+async = require('async');
 Schema = mongoose.Schema;
 
 schema = new Schema({
-  'code'              : {
+  'disciplineCode'    : {
     'type'     : String,
     'required' : true
   },
@@ -42,8 +43,8 @@ schema = new Schema({
 });
 
 schema.index({
-  'code'  : 1,
-  'block' : 1
+  'disciplineCode' : 1,
+  'block'          : 1
 }, {
   'unique' : true
 });

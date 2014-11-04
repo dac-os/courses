@@ -72,7 +72,7 @@ router
 
   var requirement;
   requirement = new Requirement({
-    'code'              : request.discipline ? request.discipline.code : request.param('mask', ''),
+    'disciplineCode'    : request.discipline ? request.discipline.code : request.param('mask', ''),
     'block'             : request.block._id,
     'suggestedSemester' : request.param('suggestedSemester'),
     'mask'              : request.param('mask'),
@@ -253,7 +253,7 @@ router
 
   var requirement;
   requirement = request.requirement;
-  requirement.code = request.discipline ? request.discipline.code : request.param('mask', '');
+  requirement.disciplineCode = request.discipline ? request.discipline.code : request.param('mask', '');
   requirement.block = request.block._id;
   requirement.suggestedSemester = request.param('suggestedSemester');
   requirement.mask = request.param('mask');
@@ -374,7 +374,7 @@ router.param('requirement', function findRequirement(request, response, next, id
 
   var query;
   query = Requirement.findOne();
-  query.where('code').equals(id);
+  query.where('disciplineCode').equals(id);
   query.where('block').equals(request.block._id);
   query.populate('discipline');
   query.exec(function foundRequirement(error, requirement) {
