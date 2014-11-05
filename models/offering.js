@@ -27,7 +27,15 @@ schema = new Schema({
   },
   'reservations' : [
     {
-      'type' : String
+      'catalogYear' : {
+        'type'     : String,
+        'required' : true
+      },
+      'course'      : {
+        'type'     : Schema.ObjectId,
+        'ref'      : 'Course',
+        'required' : true
+      }
     }
   ],
   'vacancy'      : {

@@ -38,13 +38,13 @@ router.use(function (request, response, next) {
  * @apiGroup requirement
  * @apiPermission changeRequirement
  * @apiDescription
- * When creating a new requirement the user must send the requirement suggestedSemester, discipline and mask. The
- * requirement code is used for identifying and must be unique in the system. If a existing code is sent to this method,
- * a 409 error will be raised. And if no discipline or mask is sent, a 400 error will be raised.
+ * When creating a new requirement the user must send the requirement suggestion, discipline and mask. The requirement
+ * code is used for identifying and must be unique in the system. If a existing code is sent to this method, a 409 error
+ * will be raised. And if no discipline or mask is sent, a 400 error will be raised.
  *
  * @apiParam {String} discipline Requirement discipline code.
  * @apiParam {String} mask Requirement discipline mask.
- * @apiParam {Number} suggestedSemester Requirement suggested semester.
+ * @apiParam {Object} suggestion Requirement suggested semester.
  *
  * @apiErrorExample
  * HTTP/1.1 400 Bad Request
@@ -72,11 +72,11 @@ router
 
   var requirement;
   requirement = new Requirement({
-    'disciplineCode'    : request.discipline ? request.discipline.code : request.param('mask', ''),
-    'block'             : request.block._id,
-    'suggestedSemester' : request.param('suggestedSemester'),
-    'mask'              : request.param('mask'),
-    'discipline'        : request.discipline ? request.discipline._id : null
+    'disciplineCode' : request.discipline ? request.discipline.code : request.param('mask', ''),
+    'block'          : request.block._id,
+    'suggestion'     : request.param('suggestion'),
+    'mask'           : request.param('mask'),
+    'discipline'     : request.discipline ? request.discipline._id : null
   });
   return requirement.save(function createdRequirement(error) {
     if (error) {

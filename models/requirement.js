@@ -17,8 +17,13 @@ schema = new Schema({
     'ref'      : 'Block',
     'required' : true
   },
-  'suggestedSemester' : {
-    'type' : String
+  'suggestion' : {
+    'period' : {
+      'type' : String
+    },
+    'type' : {
+      'type' : String
+    }
   },
   'mask'              : {
     'type' : String

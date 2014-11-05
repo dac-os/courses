@@ -1269,9 +1269,9 @@ HTTP/1.1 409 Conflict
 
 ## Creates a new requirement.
 
-When creating a new requirement the user must send the requirement suggestedSemester, discipline and mask. The
-requirement code is used for identifying and must be unique in the system. If a existing code is sent to this method,
-a 409 error will be raised. And if no discipline or mask is sent, a 400 error will be raised.
+When creating a new requirement the user must send the requirement suggestion, discipline and mask. The requirement
+code is used for identifying and must be unique in the system. If a existing code is sent to this method, a 409 error
+will be raised. And if no discipline or mask is sent, a 400 error will be raised.
 
 	POST /catalogs/:catalog/modalities/:modality/blocks/:block/requirements
 
@@ -1281,7 +1281,7 @@ a 409 error will be raised. And if no discipline or mask is sent, a 400 error wi
 |---------|-----------|--------------------------------------|
 | discipline			| String			|  Requirement discipline code.							|
 | mask			| String			|  Requirement discipline mask.							|
-| suggestedSemester			| Number			|  Requirement suggested semester.							|
+| suggestion			| Object			|  Requirement suggested semester.							|
 
 ### Success Response
 

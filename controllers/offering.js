@@ -1,12 +1,37 @@
-var VError, router, nconf, slug, auth, Offering, Discipline;
+var VError, router, nconf, slug, async, auth, Offering, Discipline, Course;
 
 VError = require('verror');
 router = require('express').Router();
 nconf = require('nconf');
 slug = require('slug');
 auth = require('dacos-auth-driver');
+async = require('async');
 Offering = require('../models/offering');
 Discipline = require('../models/discipline');
+Course = require('../models/course');
+
+router.use(function (request, response, next) {
+  'use strict';
+
+  var reservations;
+  reservations = request.param('reservations', []);
+  return async.waterfall([function (next) {
+    async.map(reservations, function (reservation, next) {
+      async.waterfall([function (next) {
+        var query;
+        query = Course.findOne();
+        query.where('code').equals(reservation.course);
+        query.exec(next);
+      }, function (discipline, next) {
+        reservation.discipline = discipline._id;
+        next(reservation);
+      }], next);
+    }, next);
+  }, function (reservations, next) {
+    request.reservations = reservations;
+    next();
+  }], next);
+});
 
 /**
  * @api {post} /disciplines/:discipline/offerings Creates a new offering.
@@ -61,7 +86,7 @@ router
     'code'         : slug(request.param('code', '')),
     'year'         : request.param('year'),
     'period'       : request.param('period'),
-    'reservations' : request.param('reservations'),
+    'reservations' : request.reservations,
     'vacancy'      : request.param('vacancy'),
     'schedules'    : request.param('schedules'),
     'discipline'   : request.discipline
@@ -125,6 +150,7 @@ router
   query = Offering.find();
   query.where('discipline').equals(request.discipline._id);
   query.populate('discipline');
+  query.populate('reservations.course');
   query.skip(page);
   query.limit(pageSize);
   return query.exec(function listedOffering(error, offerings) {
@@ -325,6 +351,7 @@ router.param('offering', function findOffering(request, response, next, id) {
   query.where('period').equals(code[1]);
   query.where('code').equals(code[2]);
   query.populate('discipline');
+  query.populate('reservations.course');
   query.exec(function foundOffering(error, offering) {
     if (error) {
       error = new VError(error, 'error finding offering: "%s"', offering);
