@@ -198,7 +198,7 @@ router
 
   var course;
   course = request.course;
-  course.code = slug(request.param('code'));
+  course.code = slug(request.param('code', ''));
   course.name = request.param('name', '');
   course.level = request.param('level', '');
   return course.save(function updatedCourse(error) {

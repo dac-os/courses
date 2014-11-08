@@ -76,73 +76,87 @@ describe('requirement controller', function () {
   describe('create', function () {
     before(Requirement.remove.bind(Requirement));
 
-    it('should raise error without token', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
-      request.send({'discipline' : 'MC001'});
-      request.expect(403);
-      request.end(done);
+    describe('without token', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
+        request.send({'discipline' : 'MC001'});
+        request.expect(403);
+        request.end(done);
+      });
     });
 
-    it('should raise error without changeRequirement permission', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
-      request.set('csrf-token', 'userToken');
-      request.send({'discipline' : 'MC001'});
-      request.expect(403);
-      request.end(done);
+    describe('without changeRequirement permission', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
+        request.set('csrf-token', 'userToken');
+        request.send({'discipline' : 'MC001'});
+        request.expect(403);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid catalog', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.post('/catalogs/2012/modalities/42-AA/blocks/visao/requirements');
-      request.set('csrf-token', 'adminToken');
-      request.send({'discipline' : 'MC001'});
-      request.expect(404);
-      request.end(done);
+    describe('without valid catalog', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.post('/catalogs/2012/modalities/42-AA/blocks/visao/requirements');
+        request.set('csrf-token', 'adminToken');
+        request.send({'discipline' : 'MC001'});
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid modality', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements');
-      request.set('csrf-token', 'adminToken');
-      request.send({'discipline' : 'MC001'});
-      request.expect(404);
-      request.end(done);
+    describe('without valid modality', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.post('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements');
+        request.set('csrf-token', 'adminToken');
+        request.send({'discipline' : 'MC001'});
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid block', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements');
-      request.set('csrf-token', 'adminToken');
-      request.send({'discipline' : 'MC001'});
-      request.expect(404);
-      request.end(done);
+    describe('without valid block', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.post('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements');
+        request.set('csrf-token', 'adminToken');
+        request.send({'discipline' : 'MC001'});
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should create with mask', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
-      request.set('csrf-token', 'adminToken');
-      request.send({'mask' : 'MC---'});
-      request.expect(201);
-      request.end(done);
+    describe('with mask', function () {
+      it('should create', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
+        request.set('csrf-token', 'adminToken');
+        request.send({'mask' : 'MC---'});
+        request.expect(201);
+        request.end(done);
+      });
     });
 
-    it('should create with discipline', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
-      request.set('csrf-token', 'adminToken');
-      request.send({'discipline' : 'MC001'});
-      request.expect(201);
-      request.end(done);
+    describe('with discipline', function () {
+      it('should create', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
+        request.set('csrf-token', 'adminToken');
+        request.send({'discipline' : 'MC001'});
+        request.expect(201);
+        request.end(done);
+      });
     });
 
     describe('with code taken', function () {
@@ -172,63 +186,71 @@ describe('requirement controller', function () {
   describe('list', function () {
     before(Requirement.remove.bind(Requirement));
 
-    before(function (done) {
-      var request;
-      request = supertest(app);
-      request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
-      request.set('csrf-token', 'adminToken');
-      request.send({'discipline' : 'MC001'});
-      request.end(done);
+    describe('without valid catalog', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2012/modalities/42-AA/blocks/visao/requirements');
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid catalog', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2012/modalities/42-AA/blocks/visao/requirements');
-      request.expect(404);
-      request.end(done);
+    describe('without valid modality', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements');
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid modality', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements');
-      request.expect(404);
-      request.end(done);
+    describe('without valid block', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements');
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid block', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements');
-      request.expect(404);
-      request.end(done);
-    });
+    describe('with one in database', function () {
+      before(function (done) {
+        var request;
+        request = supertest(app);
+        request = request.post('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
+        request.set('csrf-token', 'adminToken');
+        request.send({'discipline' : 'MC001'});
+        request.end(done);
+      });
 
-    it('should list', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
-      request.expect(200);
-      request.expect(function (response) {
-        response.body.should.be.instanceOf(Array).with.lengthOf(1);
-        response.body.every(function (requirement) {
-          requirement.should.have.property('discipline');
+      it('should list 1 in first page', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
+        request.expect(200);
+        request.expect(function (response) {
+          response.body.should.be.instanceOf(Array).with.lengthOf(1);
+          response.body.every(function (requirement) {
+            requirement.should.have.property('discipline');
+          });
         });
+        request.end(done);
       });
-      request.end(done);
-    });
 
-    it('should return empty in second page', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
-      request.send({'page' : 1});
-      request.expect(200);
-      request.expect(function (response) {
-        response.body.should.be.instanceOf(Array).with.lengthOf(0);
+      it('should return empty in second page', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements');
+        request.send({'page' : 1});
+        request.expect(200);
+        request.expect(function (response) {
+          response.body.should.be.instanceOf(Array).with.lengthOf(0);
+        });
+        request.end(done);
       });
-      request.end(done);
     });
   });
 
@@ -253,58 +275,70 @@ describe('requirement controller', function () {
       request.end(done);
     });
 
-    it('should raise error with invalid catalog code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2012/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.expect(404);
-      request.end(done);
-    });
-
-    it('should raise error with invalid modality code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
-      request.expect(404);
-      request.end(done);
-    });
-
-    it('should raise error with invalid blockcode', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements/MC001');
-      request.expect(404);
-      request.end(done);
-    });
-
-    it('should raise error with invalid code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/invalid');
-      request.expect(404);
-      request.end(done);
-    });
-
-    it('should show with discipline', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.expect(200);
-      request.expect(function (response) {
-        response.body.should.have.property('discipline');
+    describe('without valid catalog code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2012/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.expect(404);
+        request.end(done);
       });
-      request.end(done);
     });
 
-    it('should show with mask', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC---');
-      request.expect(200);
-      request.expect(function (response) {
-        response.body.should.have.property('mask');
+    describe('without valid modality code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
+        request.expect(404);
+        request.end(done);
       });
-      request.end(done);
+    });
+
+    describe('without valid blockcode', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements/MC001');
+        request.expect(404);
+        request.end(done);
+      });
+    });
+
+    describe('without valid code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/invalid');
+        request.expect(404);
+        request.end(done);
+      });
+    });
+
+    describe('with discipline', function () {
+      it('should show', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.expect(200);
+        request.expect(function (response) {
+          response.body.should.have.property('discipline');
+        });
+        request.end(done);
+      });
+    });
+
+    describe('with mask', function () {
+      it('should show', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC---');
+        request.expect(200);
+        request.expect(function (response) {
+          response.body.should.have.property('mask');
+        });
+        request.end(done);
+      });
     });
   });
 
@@ -320,82 +354,117 @@ describe('requirement controller', function () {
       request.end(done);
     });
 
-    it('should raise error without token', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.send({'mask' : 'MC---'});
-      request.expect(403);
-      request.end(done);
+    describe('without token', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.send({'mask' : 'MC---'});
+        request.expect(403);
+        request.end(done);
+      });
     });
 
-    it('should raise error without changeRequirement permission', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'userToken');
-      request.send({'mask' : 'MC---'});
-      request.expect(403);
-      request.end(done);
+    describe('without changeRequirement permission', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'userToken');
+        request.send({'mask' : 'MC---'});
+        request.expect(403);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid catalog code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.put('/catalogs/2012/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.send({'mask' : 'MC---'});
-      request.expect(404);
-      request.end(done);
+    describe('without valid catalog code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.put('/catalogs/2012/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.send({'mask' : 'MC---'});
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid modality code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.send({'mask' : 'MC---'});
-      request.expect(404);
-      request.end(done);
+    describe('without valid modality code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.put('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.send({'mask' : 'MC---'});
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid block code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.send({'mask' : 'MC---'});
-      request.expect(404);
-      request.end(done);
+    describe('without valid block code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.put('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.send({'mask' : 'MC---'});
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/invalid');
-      request.set('csrf-token', 'adminToken');
-      request.send({'mask' : 'MC---'});
-      request.expect(404);
-      request.end(done);
+    describe('without valid code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/invalid');
+        request.set('csrf-token', 'adminToken');
+        request.send({'mask' : 'MC---'});
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error without discipline and mask', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.expect(400);
-      request.end(done);
+    describe('without discipline and mask', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.expect(400);
+        request.end(done);
+      });
     });
 
-    it('should update', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.send({'mask' : 'MC---'});
-      request.expect(200);
-      request.end(done);
+    describe('with valid credentials and mask', function () {
+      it('should update', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.put('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.send({'mask' : 'MC---'});
+        request.expect(200);
+        request.end(done);
+      });
+
+      after(function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.expect(404);
+        request.end(done);
+      });
+
+      after(function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC---');
+        request.expect(200);
+        request.expect(function (response) {
+          response.body.should.have.property('mask');
+        });
+        request.end(done);
+      });
     });
 
     describe('with code taken', function () {
@@ -432,66 +501,88 @@ describe('requirement controller', function () {
       request.end(done);
     });
 
-    it('should raise error without token', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.expect(403);
-      request.end(done);
+    describe('without token', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.del('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.expect(403);
+        request.end(done);
+      });
     });
 
-    it('should raise error without changeRequirement permission', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'userToken');
-      request.expect(403);
-      request.end(done);
+    describe('without changeRequirement permission', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.del('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'userToken');
+        request.expect(403);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid catalog code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.del('/catalogs/2012/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.expect(404);
-      request.end(done);
+    describe('without valid catalog code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.del('/catalogs/2012/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid modality code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.expect(404);
-      request.end(done);
+    describe('without valid modality code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.del('/catalogs/2014/modalities/100-invalid/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid block code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.expect(404);
-      request.end(done);
+    describe('without valid block code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.del('/catalogs/2014/modalities/42-AA/blocks/invalid/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should raise error with invalid code', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/invalid');
-      request.set('csrf-token', 'adminToken');
-      request.expect(404);
-      request.end(done);
+    describe('without valid code', function () {
+      it('should raise error', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.del('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/invalid');
+        request.set('csrf-token', 'adminToken');
+        request.expect(404);
+        request.end(done);
+      });
     });
 
-    it('should delete', function (done) {
-      var request;
-      request = supertest(app);
-      request = request.del('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
-      request.set('csrf-token', 'adminToken');
-      request.expect(204);
-      request.end(done);
+    describe('with valid credentials and code', function () {
+      it('should delete', function (done) {
+        var request;
+        request = supertest(app);
+        request = request.del('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.set('csrf-token', 'adminToken');
+        request.expect(204);
+        request.end(done);
+      });
+
+      after(function (done) {
+        var request;
+        request = supertest(app);
+        request = request.get('/catalogs/2014/modalities/42-AA/blocks/visao/requirements/MC001');
+        request.expect(404);
+        request.end(done);
+      });
     });
   });
 });
