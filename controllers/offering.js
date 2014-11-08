@@ -347,7 +347,7 @@ router.param('offering', function findOffering(request, response, next, id) {
   code = id.split('-');
   query = Offering.findOne();
   query.where('discipline').equals(request.discipline._id);
-  query.where('year').equals(code[0]);
+  query.where('year').equals(isNaN(code[0]) ? 0 : code[0]);
   query.where('period').equals(code[1]);
   query.where('code').equals(code[2]);
   query.populate('discipline');

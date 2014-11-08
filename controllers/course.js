@@ -254,7 +254,7 @@ router.param('course', function findCourse(request, response, next, id) {
 
   var query;
   query = Course.findOne();
-  query.where('code').equals(id);
+  query.where('code').equals(isNaN(id) ? 0 : id);
   query.exec(function foundCourse(error, course) {
     if (error) {
       error = new VError(error, 'error finding course: "%s"', course);

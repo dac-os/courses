@@ -256,7 +256,7 @@ router.param('catalog', function findCatalog(request, response, next, id) {
 
   var query;
   query = Catalog.findOne();
-  query.where('year').equals(id);
+  query.where('year').equals(isNaN(id) ? 0 : id);
   query.exec(function foundCatalog(error, catalog) {
     if (error) {
       error = new VError(error, 'error finding catalog: "%s"', catalog);
