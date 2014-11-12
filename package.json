@@ -4,7 +4,7 @@
   "description": "catalogo do sistema da diretoria academica DAC",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha test/ --require blanket -R mocha-spec-cov-alt",
+    "test": "MONGOHQ_URL=mongodb://localhost/dacos-test NODE_ENV=test mocha test/ --require blanket -R mocha-spec-cov-alt",
     "predocs": "apidoc -i controllers/ -o docs/",
     "docs": "apidoc-markdown -p docs/ -o README.md",
     "postdocs": "rm -R docs",
