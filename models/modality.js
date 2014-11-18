@@ -13,7 +13,7 @@ schema = new Schema({
     'required' : true
   },
   'courseCode'  : {
-    'type'     : String,
+    'type'     : Number,
     'required' : true
   },
   'creditLimit' : {
