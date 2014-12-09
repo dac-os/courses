@@ -151,6 +151,8 @@ router
   query.where('discipline').equals(request.discipline._id);
   query.populate('discipline');
   query.populate('reservations.course');
+  if (request.param('filterByYear')) query.where('year').equals(request.param('filterByYear'));
+  if (request.param('filterByPeriod')) query.where('period').equals(request.param('filterByPeriod'));
   query.skip(page);
   query.limit(pageSize);
   return query.exec(function listedOffering(error, offerings) {

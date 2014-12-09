@@ -145,6 +145,8 @@ router
   page = request.param('page', 0) * pageSize;
   query = Discipline.find();
   query.populate('requirements');
+  if (request.param('filterByName')) query.where('name').equals(new RegExp(request.param('filterByName'), 'i'));
+  if (request.param('filterByDepartment')) query.where('department').equals(new RegExp(request.param('filterByDepartment'), 'i'));
   query.skip(page);
   query.limit(pageSize);
   return query.exec(function listedDiscipline(error, disciplines) {

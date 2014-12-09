@@ -104,6 +104,7 @@ router
   page = request.param('page', 0) * pageSize;
   query = Block.find();
   query.where('modality').equals(request.modality._id);
+  if (request.param('filterByType')) query.where('type').equals(request.param('filterByType'));
   query.skip(page);
   query.limit(pageSize);
   return query.exec(function listedBlock(error, blocks) {

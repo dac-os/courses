@@ -150,6 +150,7 @@ router
   query.where('catalog').equals(request.catalog._id);
   query.populate('course');
   query.populate('catalog');
+  if (request.param('filterByName')) query.where('name').equals(new RegExp(request.param('filterByName'), 'i'));
   query.skip(page);
   query.limit(pageSize);
   return query.exec(function listedModality(error, modalities) {

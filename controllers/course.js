@@ -100,6 +100,8 @@ router
   pageSize = nconf.get('PAGE_SIZE');
   page = request.param('page', 0) * pageSize;
   query = Course.find();
+  if (request.param('filterByName')) query.where('name').equals(new RegExp(request.param('filterByName'), 'i'));
+  if (request.param('filterByLevel')) query.where('level').equals(request.param('filterByLevel'));
   query.skip(page);
   query.limit(pageSize);
   return query.exec(function listedCourse(error, courses) {
