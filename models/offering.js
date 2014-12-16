@@ -8,7 +8,7 @@ async = require('async');
 Schema = mongoose.Schema;
 
 schema = new Schema({
-  'code'         : {
+  'class'        : {
     'type'     : String,
     'required' : true
   },
@@ -73,7 +73,6 @@ schema = new Schema({
 });
 
 schema.index({
-  'code'       : 1,
   'discipline' : 1,
   'year'       : 1,
   'period'     : 1,
@@ -85,7 +84,7 @@ schema.index({
 
 schema.plugin(jsonSelect, {
   '_id'          : 0,
-  'code'         : 1,
+  'class'        : 1,
   'discipline'   : 0,
   'year'         : 1,
   'period'       : 1,

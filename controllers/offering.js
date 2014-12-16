@@ -45,7 +45,7 @@ router.use(function (request, response, next) {
  * code is sent to this method, a 409 error will be raised. And if no code, or year, or vacancy or period is sent, a 400
  * error will be raised. The schedules vector contains the weekday, hour and room of each class of the offering
  *
- * @apiParam {String} code Offering code.
+ * @apiParam {String} class Offering class.
  * @apiParam {Number} year Offering year.
  * @apiParam {String} period Offering period.
  * @apiParam {String []} reservations Offering reservations.
@@ -83,7 +83,7 @@ router
 
   var offering;
   offering = new Offering({
-    'code'         : slug(request.param('code', '')),
+    'class'        : request.param('class'),
     'year'         : request.param('year'),
     'period'       : request.param('period'),
     'reservations' : request.reservations,
@@ -269,7 +269,7 @@ router
 
   var offering;
   offering = request.offering;
-  offering.code = slug(request.param('code', ''));
+  offering.class = slug(request.param('class', ''));
   offering.year = request.param('year');
   offering.period = request.param('period');
   offering.reservations = request.param('reservations');
@@ -351,7 +351,7 @@ router.param('offering', function findOffering(request, response, next, id) {
   query.where('discipline').equals(request.discipline._id);
   query.where('year').equals(isNaN(code[0]) ? 0 : code[0]);
   query.where('period').equals(code[1]);
-  query.where('code').equals(code[2]);
+  query.where('class').equals(code[2]);
   query.populate('discipline');
   query.populate('reservations.course');
   query.exec(function foundOffering(error, offering) {
