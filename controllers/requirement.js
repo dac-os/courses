@@ -255,7 +255,7 @@ router
   requirement = request.requirement;
   requirement.disciplineCode = request.discipline ? request.discipline.code : request.param('mask', '');
   requirement.block = request.block._id;
-  requirement.suggestedSemester = request.param('suggestedSemester');
+  requirement.suggestion = request.param('suggestion');
   requirement.mask = request.param('mask');
   requirement.discipline = request.discipline ? request.discipline._id : null;
   return requirement.save(function updatedRequirement(error) {

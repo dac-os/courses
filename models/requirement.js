@@ -8,35 +8,35 @@ async = require('async');
 Schema = mongoose.Schema;
 
 schema = new Schema({
-  'disciplineCode'    : {
+  'disciplineCode' : {
     'type'     : String,
     'required' : true
   },
-  'block'             : {
+  'block'          : {
     'type'     : Schema.ObjectId,
     'ref'      : 'Block',
     'required' : true
   },
-  'suggestion' : {
+  'suggestion'     : {
     'period' : {
       'type' : String
     },
-    'type' : {
+    'type'   : {
       'type' : String
     }
   },
-  'mask'              : {
+  'mask'           : {
     'type' : String
   },
-  'discipline'        : {
+  'discipline'     : {
     'type' : Schema.ObjectId,
     'ref'  : 'Discipline'
   },
-  'createdAt'         : {
+  'createdAt'      : {
     'type'    : Date,
     'default' : Date.now
   },
-  'updatedAt'         : {
+  'updatedAt'      : {
     'type' : Date
   }
 }, {
@@ -55,14 +55,14 @@ schema.index({
 });
 
 schema.plugin(jsonSelect, {
-  '_id'               : 0,
-  'code'              : 0,
-  'block'             : 0,
-  'suggestedSemester' : 1,
-  'mask'              : 1,
-  'discipline'        : 1,
-  'createdAt'         : 1,
-  'updatedAt'         : 1
+  '_id'        : 0,
+  'code'       : 0,
+  'block'      : 0,
+  'suggestion' : 1,
+  'mask'       : 1,
+  'discipline' : 1,
+  'createdAt'  : 1,
+  'updatedAt'  : 1
 });
 
 schema.pre('save', function setRequirementUpdatedAt(next) {
